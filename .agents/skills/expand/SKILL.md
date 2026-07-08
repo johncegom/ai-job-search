@@ -1,4 +1,11 @@
-# /expand - Competency Expansion from Documents and Online Presence
+---
+name: expand-workflow
+description: >
+  Scans user documents, GitHub, and online presence to discover hidden competencies, enriches them with web research, and appends them to candidate profile.
+  Triggers on: expand, /expand, expand profile, enrich profile, discover skills, scan github
+---
+
+# Competency Expansion from Documents and Online Presence
 
 You are enriching the candidate profile by discovering competencies hidden in documents and public online presence. This command is additive only — it never modifies existing profile content, only extends it.
 
@@ -10,8 +17,8 @@ Follow these steps **exactly in order**. Do not skip steps.
 
 Read these two files in parallel before doing anything else. You must know what is already there so you do not propose duplicates.
 
-- `.claude/skills/job-application-assistant/01-candidate-profile.md`
-- `.claude/skills/job-application-assistant/02-behavioral-profile.md`
+- `.agents/skills/job-application-assistant/01-candidate-profile.md`
+- `.agents/skills/job-application-assistant/02-behavioral-profile.md`
 
 Hold this content in context throughout the command. Do not re-read these files later.
 
@@ -45,7 +52,7 @@ Read all files in `documents/diplomas/`. Extract:
 
 ### 1d. documents/references/
 Read all files in `documents/references/`. Extract:
-- Competency language used by the referee (what skills or qualities they mention)
+- Competency language used by the referee
 - Any specific projects, tools, or methods named
 
 ### 1e. GitHub Profile
@@ -54,10 +61,10 @@ Look up the GitHub username from `01-candidate-profile.md`. If a GitHub URL or u
 1. Use WebFetch or WebSearch to retrieve the public profile and pinned repositories
 2. For each repository found:
    - Fetch the repository README
-   - Note: name, description, primary language(s), topics/tags, any frameworks or libraries mentioned in the README
-3. Also retrieve the full repository list if available (to catch unpinned repos)
+   - Note: name, description, primary language(s), topics/tags, any technologies mentioned in the README
+3. Also retrieve the full repository list if available.
 
-If no GitHub username or URL is found in the profile, skip this source and note it was skipped.
+If no GitHub username or URL is found in the profile, skip this source.
 
 ### 1f. Other URLs in Profile
 Check `01-candidate-profile.md` for any other URLs (portfolio site, personal website, Kaggle, Google Scholar, ResearchGate, publication links). For each:
@@ -68,7 +75,7 @@ Check `01-candidate-profile.md` for any other URLs (portfolio site, personal web
 
 ## Step 2: Web Enrichment
 
-For each experience item discovered in Step 1, search the web to extract the competencies it implies. Apply both approaches below — do not choose one over the other.
+For each experience item discovered in Step 1, search the web to extract the competencies it implies. Apply both approaches below:
 
 ### Approach A: Direct lookup (explicit tools and frameworks)
 If the item names a specific tool, framework, library, method, or platform, search for it directly:
@@ -95,23 +102,22 @@ Combine both approaches into a single competency list for each item.
 ### Infer (without web lookup) for:
 - Generic job responsibility bullets with no named tool
 - Vague project descriptions
-- Reference letter language (already phrased as competency — just record it)
+- Reference letter language
 
 ---
 
 ## Step 3: Build Competency Map
 
 After enriching all items, build a deduplicated competency map. Group findings into these categories:
-
-**Technical Skills — Primary** (core languages, frameworks, methods you use regularly)  
-**Technical Skills — Secondary** (tools you have used but are not primary)  
-**Domain Knowledge** (subject matter expertise: geophysics, ML, NLP, etc.)  
-**Methods and Practices** (agile, version control, reproducibility, testing, etc.)  
-**Soft / Behavioral** (leadership, communication, collaboration signals from references and project descriptions)  
+- **Technical Skills — Primary**
+- **Technical Skills — Secondary**
+- **Domain Knowledge**
+- **Methods and Practices**
+- **Soft / Behavioral**
 
 For each competency, record:
 - The competency name
-- The source item it came from (e.g. "Coursera — Deep Learning Specialisation", "GitHub — repo-name", "Reference letter — Jens Jensen")
+- The source item it came from (e.g. "Coursera — Deep Learning Specialisation")
 - Whether it came from direct lookup (A), inference (B), or both
 
 Remove anything already present in `01-candidate-profile.md` or `02-behavioral-profile.md`.
@@ -123,7 +129,7 @@ Remove anything already present in `01-candidate-profile.md` or `02-behavioral-p
 Present all new competencies for the user's review before writing anything. Format:
 
 ```
-## /expand found [N] new competency signals across [M] sources
+## Competency signals found across sources
 
 **COURSES & CERTIFICATIONS**
 Source: [Course/cert name — Provider]
@@ -146,21 +152,18 @@ Source: CV bullets + direct tool lookup
 Source: [Reference letter — Name / LinkedIn About / Project leadership]
   + [Signal 1]
   ...
-
-[more sections as needed]
 ```
 
 Then ask:
 
 > **How would you like to proceed?**
->
 > - **`all`** — Add everything above to your profile
-> - **`review`** — I'll walk you through each source group one at a time
+> - **`review`** — Walk through each source group one at a time
 > - **`skip`** — Cancel without writing anything
 >
-> Or list specific groups to skip (e.g. "skip GitHub, add everything else").
+> Or specify groups to skip (e.g. "skip GitHub, add everything else").
 
-Wait for the user's response before writing anything.
+Wait for the response before writing.
 
 ---
 
@@ -170,13 +173,13 @@ Apply only the confirmed items. Use the Edit tool to add to the relevant section
 
 ### Additions to `01-candidate-profile.md`
 - Technical skills (primary and secondary) → append to the Technical Skills section
-- Domain knowledge → append to the Domain Knowledge or Technical Skills section (match the existing structure)
+- Domain knowledge → append to the Domain Knowledge or Technical Skills section
 - Methods and practices → append appropriately
 
-For each addition, add a brief source annotation in a comment or parenthetical: *(Coursera — Deep Learning Specialisation)*, *(GitHub — project-name)*, etc. This makes future `/expand` runs idempotent.
+For each addition, add a brief source annotation in a comment or parenthetical: *(Coursera — Deep Learning Specialisation)*, *(GitHub — project-name)*, etc.
 
 ### Additions to `02-behavioral-profile.md`
-- Soft/behavioral signals → append to the "Strongest Behavioral Traits" or "How I Work Best" section (match existing structure)
+- Soft/behavioral signals → append to the "Strongest Behavioral Traits" or "How I Work Best" section
 - Always label inferred behavioral additions: *[Inferred from reference letter — Name / review before relying on this]*
 
 ---
@@ -186,7 +189,7 @@ For each addition, add a brief source annotation in a comment or parenthetical: 
 After writing, present:
 
 ```
-## /expand Complete
+## Expand Complete
 
 ### Added to 01-candidate-profile.md
 [List each competency added, with source]
@@ -198,19 +201,8 @@ After writing, present:
 [List each source scanned and how many competencies it yielded]
 
 ### Sources skipped
-[List any sources that were missing, empty, or yielded nothing new — with brief reason]
+[List any sources that were missing, empty, or yielded nothing new]
 
 ### Needs manual review
-[Any items that were ambiguous, partially readable, or where web lookup returned no clear syllabus]
+[Any items that were ambiguous or where web lookup returned no clear syllabus]
 ```
-
----
-
-## Design Principles
-
-- **Additive only.** This command never modifies existing profile content. It only appends.
-- **Source-traceable.** Every addition records where it came from, so future runs are idempotent and the user can verify or remove individual items later.
-- **Both approaches, always.** Web lookup and inference are applied together — not as alternatives. A named course gets its official syllabus AND a reasoned competency list.
-- **User confirms before writing.** The full competency map is shown and confirmed before a single file is touched.
-- **Behavioral signals are labeled.** Anything inferred from tone, language, or indirect signals is marked as inferred so it is reviewed critically.
-- **GitHub is fully scanned.** All public repositories are checked, not just pinned ones — unpinned repos often contain significant competency signals.
