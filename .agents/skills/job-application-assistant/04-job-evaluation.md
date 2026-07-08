@@ -16,9 +16,9 @@ How well do the required/preferred skills align with the candidate's capabilitie
 | 40-59 | Partial match, significant upskilling needed |
 | 0-39 | Fundamental mismatch |
 
-**Strong match areas:** [YOUR_PRIMARY_SKILLS]
-**Moderate match areas:** [YOUR_SECONDARY_SKILLS]
-**Weak match areas:** [SKILLS_YOU_LACK]
+**Strong match areas:** Go, TypeScript/JavaScript, React Native, BLE & Wi-Fi device connectivity.
+**Moderate match areas:** Erlang, Databases (Mnesia, SQLite, Firebase), RESTful APIs, telecommunications signaling (SIP, Diameter, Megaco), Agile/Scrum facilitation, Git, CI/CD pipelines (Jenkins, GitLab CI).
+**Weak match areas:** Machine Learning/AI model training, heavy cloud DevOps (AWS/Azure at scale), enterprise systems administration.
 
 ### 2. Experience Match (0-100)
 Does work history align with what they're looking for?
@@ -30,9 +30,9 @@ Does work history align with what they're looking for?
 | 40-59 | Adjacent experience, would need to make the case |
 | 0-39 | Unrelated experience |
 
-**Strong:** [YOUR_DIRECT_EXPERIENCE_DOMAINS]
-**Moderate:** [YOUR_ADJACENT_EXPERIENCE]
-**Entry-level:** [ROLES_WITH_LIMITED_EXPERIENCE]
+**Strong:** High-availability telecom software engineering, mobile device-management applications, Scrum Master leadership.
+**Moderate:** General full-stack web and backend API development.
+**Entry-level:** Cloud infrastructure automation.
 
 ### 3. Behavioral/Culture Fit (0-100)
 Does the role and company culture match the behavioral profile?
@@ -63,19 +63,19 @@ Does this role advance career goals and contain tasks that energize?
 | 0-39 | Dead end or backwards step |
 
 **Career goals:**
-- [YOUR_CAREER_GOAL_1]
-- [YOUR_CAREER_GOAL_2]
-- [YOUR_CAREER_GOAL_3]
+- Transition to and expand expertise in Backend Development (particularly utilizing Go and TypeScript/JavaScript).
+- Work on robust, real-time communication, IoT, or networking platforms where BLE/connectivity skills are valuable.
+- Leverage and grow Scrum/Agile engineering practices within collaborative engineering teams.
 
 **Motivation filter:** Evaluate not just whether you *can* do the tasks, but whether the tasks will *energize* you. Consider:
-- Tasks that energize: [YOUR_ENERGIZING_TASKS]
-- Tasks that drain: [YOUR_DRAINING_TASKS]
+- Tasks that energize: Complex debugging/troubleshooting, wireless protocol optimization (BLE/Wi-Fi), building high-availability features, mentoring teammates, and streamlining workflows as Scrum Master.
+- Tasks that drain: Micro-managed individual project silos, zero documentation processes, or pure maintenance of static platforms with no modernization opportunities.
 - Non-task factors: leadership style, department culture, company values, degree of autonomy
 
 **Life situation alignment:** Consider personal constraints:
-- **Security**: [YOUR_FINANCIAL_SITUATION_CONTEXT]
-- **Flexibility**: [YOUR_SCHEDULE_CONSTRAINTS]
-- **Professional development**: [YOUR_GROWTH_PRIORITIES]
+- **Security**: Currently employed at Endava, providing stability during search.
+- **Flexibility**: Commuting within Ho Chi Minh City, Vietnam.
+- **Professional development**: Priorities include Go-centric development, IoT/connectivity, and team collaboration.
 
 ### 6. Salary Benchmark (Optional)
 

@@ -1,6 +1,13 @@
-# /reset - Reset Candidate Profile Data
+---
+name: reset-workflow
+description: >
+  Resets the profile files and/or documents folder to a blank template/fresh state.
+  Triggers on: reset, /reset, reset setup, wipe profile, clear candidate data
+---
 
-You are resetting parts of the job search framework back to a blank state so the user can start fresh with `/setup`.
+# Reset Candidate Profile Data
+
+You are resetting parts of the job search framework back to a blank state so the user can start fresh with the setup workflow.
 
 **This command is destructive.** Nothing is deleted until the user explicitly confirms. Follow these steps exactly in order.
 
@@ -8,17 +15,16 @@ You are resetting parts of the job search framework back to a blank state so the
 
 ## Step 0: Parse Scope from Arguments
 
-Check `$ARGUMENTS` for a scope keyword:
-
+Check for a scope keyword in the user input:
 - `profile` — clears candidate profile data from skill files only
 - `documents` — deletes user-provided files from the `documents/` folder only
 - `all` — both of the above
 
-If `$ARGUMENTS` is empty or does not contain a recognized scope keyword, ask:
+If no recognized scope keyword is specified, ask:
 
 > **What would you like to reset?**
 >
-> - **`profile`** — Clears candidate data from the skill files (profile, behavioral, STAR examples, profile statements). The framework structure and writing rules are preserved. Use this to re-run `/setup` from scratch.
+> - **`profile`** — Clears candidate data from the skill files (profile, behavioral, STAR examples, profile statements). The framework structure and writing rules are preserved. Use this to re-run the setup workflow from scratch.
 >
 > - **`documents`** — Deletes all files you've placed in the `documents/` folder (CV PDFs, LinkedIn export, diplomas, references, past applications). The folder structure and `README.md` are preserved.
 >
@@ -37,11 +43,10 @@ Before doing anything, show the user precisely what will be wiped.
 ### If scope includes `profile`:
 
 Read the current state of these files and report whether each has content or is already empty:
-
-- `.claude/skills/job-application-assistant/01-candidate-profile.md`
-- `.claude/skills/job-application-assistant/02-behavioral-profile.md`
-- `.claude/skills/job-application-assistant/05-cv-templates.md` *(profile statements section only — framework structure is preserved)*
-- `.claude/skills/job-application-assistant/07-interview-prep.md` *(STAR examples and STAR candidates sections only — framework structure is preserved)*
+- `.agents/skills/job-application-assistant/01-candidate-profile.md`
+- `.agents/skills/job-application-assistant/02-behavioral-profile.md`
+- `.agents/skills/job-application-assistant/05-cv-templates.md` *(profile statements section only)*
+- `.agents/skills/job-application-assistant/07-interview-prep.md` *(STAR examples and STAR candidates sections only)*
 
 Present as:
 
@@ -103,10 +108,9 @@ Present the confirmation prompt:
 >
 > Type **`RESET`** (all caps) to confirm, or anything else to cancel.
 
-Wait for the user's response.
-
-- If the user types exactly `RESET`: proceed to Step 3.
-- If the user types anything else: abort and tell them "Reset cancelled. Nothing was changed."
+Wait for the response.
+- If the response is exactly `RESET`: proceed to Step 3.
+- If the response is anything else: abort and tell them "Reset cancelled. Nothing was changed."
 
 ---
 
@@ -119,7 +123,7 @@ Wait for the user's response.
 ```markdown
 # Candidate Profile
 
-<!-- Run /setup to populate this file -->
+<!-- Run the setup workflow to populate this file -->
 
 ## Identity
 
@@ -143,7 +147,7 @@ Wait for the user's response.
 ```markdown
 # Behavioral Profile
 
-<!-- Run /setup to populate this file -->
+<!-- Run the setup workflow to populate this file -->
 
 ## Overview
 
@@ -165,35 +169,36 @@ Wait for the user's response.
 ```markdown
 **Profile statement templates:**
 
-<!-- Run /setup to populate role-specific profile statements -->
+<!-- Run the setup workflow to populate role-specific profile statements -->
 ```
 
 Leave all other content in `05-cv-templates.md` intact.
 
 **For `07-interview-prep.md`**, locate and remove:
 - The entire `## Ready-Made STAR Examples` section and all numbered STAR examples under it
-- Any `## STAR Candidates (Complete Manually)` section added by `/setup` Path A
+- Any `## STAR Candidates (Complete Manually)` section
 
 Replace with:
 
 ```markdown
 ## Ready-Made STAR Examples
 
-<!-- Run /setup to populate STAR examples from your actual experience -->
+<!-- Run the setup workflow to populate STAR examples from your actual experience -->
 ```
 
-Leave all other content in `07-interview-prep.md` intact (STAR format explanation, tough questions, questions to ask interviewers, phone/video tips, follow-up etiquette, roleplay guidelines).
+Leave all other content in `07-interview-prep.md` intact.
 
 ### Documents reset
 
-For each non-empty document subfolder, delete all files within it using Bash `rm`. Do not delete the folder itself, and do not delete `documents/README.md`.
+For each non-empty document subfolder, delete all files within it. Do not delete the folder itself, and do not delete `documents/README.md`.
 
-```bash
-rm -f documents/cv/*
-rm -f documents/linkedin/*
-rm -f documents/diplomas/*
-rm -f documents/references/*
-rm -rf documents/applications/*/
+You can clean them via powershell or command line:
+```powershell
+Remove-Item -Path documents/cv/* -Force
+Remove-Item -Path documents/linkedin/* -Force
+Remove-Item -Path documents/diplomas/* -Force
+Remove-Item -Path documents/references/* -Force
+Remove-Item -Path documents/applications/* -Recurse -Force
 ```
 
 ---
@@ -215,10 +220,10 @@ After the reset is complete, report:
 Then tell the user what to do next based on what was reset:
 
 **If profile was reset:**
-> Your candidate profile is now blank. Run `/setup` to repopulate it. The command auto-detects any files in your `documents/` folder and offers to read from there; otherwise it walks you through a CV import or interactive interview.
+> Your candidate profile is now blank. Run the setup workflow to repopulate it. The command auto-detects any files in your `documents/` folder and offers to read from there.
 
 **If documents were reset:**
-> The `documents/` folder is now empty. Add your career documents and run `/setup` to populate your profile. See `documents/README.md` for instructions on what to put where.
+> The `documents/` folder is now empty. Add your career documents and run the setup workflow to populate your profile. See `documents/README.md` for instructions on what to put where.
 
 **If both were reset:**
-> Both your profile files and documents folder are now empty. Add documents to `documents/` (or skip and use the CV import / interview path), then run `/setup`.
+> Both your profile files and documents folder are now empty. Add documents to `documents/` (or skip and use the CV import / interview path), then run setup.

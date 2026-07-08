@@ -1,6 +1,6 @@
 # Documents Folder
 
-This folder holds your actual career documents. The `/setup` command reads everything here and uses it to populate the candidate skill files under `.claude/skills/job-application-assistant/`. It is safe to re-run `/setup` as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
+This folder holds your actual career documents. The setup workflow reads everything here and uses it to populate the candidate skill files under `.agents/skills/job-application-assistant/`. It is safe to re-run setup as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
 
 ---
 
@@ -38,7 +38,7 @@ Your master CV — the most complete, unedited version of your professional reco
 
 **Naming:** Any filename works. If multiple files are present, `/setup` reads all of them and cross-references for consistency.
 
-**Tip:** Keep your most comprehensive CV here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by `/apply`.
+**Tip:** Keep your most comprehensive CV here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by the apply workflow.
 
 ---
 
@@ -99,7 +99,7 @@ Reference letters from former managers, supervisors, or collaborators.
 
 A record of past job applications. Each subfolder is one application.
 
-You can maintain these folders by hand, or let the **`/outcome`** command do it: it records progress updates and final results conversationally, archives the submitted drafts and the posting text, keeps `outcome.md` in the format below, and updates `job_search_tracker.csv` in the same step.
+You can maintain these folders by hand, or let the **outcome** workflow do it: it records progress updates and final results conversationally, archives the submitted drafts and the posting text, keeps `outcome.md` in the format below, and updates `job_search_tracker.csv` in the same step.
 
 **Subfolder naming:** `<company>_<role>` — lowercase, underscores for spaces.
 
@@ -143,9 +143,9 @@ Any signal about what they valued or didn't?
 
 `in_progress` marks an application that is still open (used by `/outcome` for interview-stage updates before a resolution). `/setup`'s calibration draws conclusions only from applications with a final status.
 
-Application folders may also contain **`interview_prep_<stage>.md`** files written by `/interview` (one per interview stage, kept as history). `/setup` reads only the four files named above and ignores these.
+Application folders may also contain **`interview_prep_<stage>.md`** files written by the interview prep workflow (one per interview stage, kept as history). The setup workflow reads only the four files named above and ignores these.
 
-**What `/setup` learns from outcome.md:**
+**What setup learns from outcome.md:**
 - Which role types and companies have led to interviews (signals strong fit areas)
 - Which applications did not progress (informs the experience match calibration in `04-job-evaluation.md`)
 - Interview feedback, if you recorded it, can surface new STAR candidates
@@ -154,7 +154,7 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 ## File Format Notes
 
-| Format | Readable by `/setup` | Notes |
+| Format | Readable by setup | Notes |
 |--------|--------------------------|-------|
 | `.pdf` | Yes | Parsed directly with the Read tool |
 | `.tex` | Yes | LaTeX source — structure and content both readable |
@@ -165,9 +165,9 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 ---
 
-## Re-running `/setup`
+## Re-running setup
 
-The command is designed to be re-run as your document collection grows. Each run:
+The workflow is designed to be re-run as your document collection grows. Each run:
 
 1. Reads the current state of all skill files
 2. Compares extracted document content against what's already there
