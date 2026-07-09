@@ -13,10 +13,10 @@ This framework is built to run directly inside the **Antigravity (Gemini)** codi
 Python 3.10+ is required for the salary lookup tool. Check with:
 
 ```bash
-python --version
+python3 --version
 ```
 
-On Windows, `py --version` is often the most reliable check if `python` is not on your PATH.
+On Windows, `py --version` is often the most reliable check. If your system exposes Python as `python` instead of `python3`, use `python` in the commands below.
 
 ### Bun (for job search tools)
 
@@ -178,7 +178,7 @@ If you have salary data (from a union, salary survey, Glassdoor, or personal res
 2. **Option B:** Convert from Excel:
    ```bash
    pip install openpyxl
-   python tools/convert_salary_excel.py path/to/salary-data.xlsx --source "My Salary Data 2025"
+   python3 tools/convert_salary_excel.py path/to/salary-data.xlsx --source "My Salary Data 2025"
    ```
 
 This creates `salary_data.json` which the `/apply` workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
@@ -234,3 +234,10 @@ The cover letter template expects fonts in `cover_letters/OpenFonts/fonts/`. Mak
 
 ### Legacy `.claude` folder
 This repository has been fully adapted to use Antigravity (Gemini) customizations under `.agents/`. You should delete any remaining `.claude/` directories if they exist from older checkouts.
+
+### Stale `.claude/settings.local.json` from an older clone
+Shared Claude Code permissions now live in `.claude/settings.json` (scoped to `bun run`, `python salary_lookup.py`, and `python3 salary_lookup.py`). Earlier versions of this repo committed a broader `.claude/settings.local.json` that pre-approved `Bash(curl:*)`, `Bash(python:*)` and `Bash(bun:*)`. If you cloned before that change, git leaves the old file behind in your working copy, and its permissions still apply on top of `settings.json`. Delete it (or trim it to your own personal overrides):
+
+```bash
+rm .claude/settings.local.json
+```
