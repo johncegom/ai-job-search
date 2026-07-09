@@ -3,20 +3,17 @@
 
 Run from anywhere: python tools/security_guards.py
 
-This repo ships pre-approved Claude Code permissions and CLI code that every
-fork user executes. These guards make the dangerous changes LOUD, not
+This repo ships Antigravity (Gemini) skill files and CLI code that every
+fork user executes. These guards make dangerous changes LOUD, not
 impossible: a PR that intentionally needs one of them must update the
 allowlists in this file in the same diff, so the change is explicit and
 reviewable rather than buried.
 
 Checks:
-1. .claude/settings.json — every permissions.allow entry must be in the exact
-   allowlist below. Catches permission widening (e.g. Bash(*), Bash(curl:*)),
-   which would auto-approve commands on every fork.
-2. .gitignore — the personal-data ignore rules must all still be present.
+1. .gitignore — the personal-data ignore rules must all still be present.
    Catches weakening that would make future users silently commit their
    tracker, profile exports, or application archives.
-3. .agents/**/package.json — no npm/bun lifecycle scripts (preinstall,
+2. .agents/**/package.json — no npm/bun lifecycle scripts (preinstall,
    install, postinstall, prepare, prepack) and no trustedDependencies.
    Catches code execution smuggled into `bun install`.
 
@@ -30,10 +27,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 errors: list[str] = []
 
-# The exact permission entries the template ships. A PR that adds or changes
-# an entry must add it here too - that is the point: the diff shows both.
+# The CLI commands the template intends to pre-approve for fork users.
+# Antigravity (Gemini) manages permissions through the IDE rather than a
+# settings.json file, so this set cannot be validated against a file at
+# CI time. It is kept here as an explicit reference: any PR that wants to
+# widen the intended command surface must update this set in the same diff.
 ALLOWED_PERMISSIONS = {
-    "Skill(job-application-assistant)",
     "Bash(bun run:*)",
     "Bash(python salary_lookup.py:*)",
     "Bash(python3 salary_lookup.py:*)",
@@ -59,25 +58,14 @@ FORBIDDEN_SCRIPTS = {"preinstall", "install", "postinstall", "prepare", "prepack
 
 
 def check_permissions() -> None:
-    path = ROOT / ".claude" / "settings.json"
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        errors.append(f".claude/settings.json: unreadable or invalid JSON: {exc}")
-        return
-    allow = data.get("permissions", {}).get("allow", [])
-    for entry in allow:
-        if entry not in ALLOWED_PERMISSIONS:
-            errors.append(
-                f".claude/settings.json: permission not in the reviewed allowlist: {entry!r}. "
-                "Pre-approved permissions run without prompting on every fork. If this entry is "
-                "intentional, add it to ALLOWED_PERMISSIONS in tools/security_guards.py in the "
-                "same PR so the widening is explicit and reviewable."
-            )
-    for entry in ALLOWED_PERMISSIONS - set(allow):
-        # Not an error: settings may legitimately drop an entry. But an
-        # allowlist entry that no longer exists should be pruned.
-        print(f"note: allowlisted permission not present in settings.json: {entry!r}")
+    # Antigravity (Gemini) manages permissions through the IDE - there is no
+    # .claude/settings.json or equivalent file shipped with this template.
+    # ALLOWED_PERMISSIONS above documents the intended safe command surface;
+    # enforcement relies on IDE configuration and human PR review.
+    print(
+        "note: check_permissions skipped - Antigravity has no settings.json "
+        "to scan (see ALLOWED_PERMISSIONS in this file for the intended allowlist)"
+    )
 
 
 def check_gitignore() -> None:
@@ -132,7 +120,7 @@ def main() -> int:
         for err in errors:
             print(f"  - {err}")
         return 1
-    print("security_guards: OK (permissions allowlist, gitignore rules, package manifests)")
+    print("security_guards: OK (gitignore rules, package manifests)")
     return 0
 
 

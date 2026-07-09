@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""Lint the repo's skill, command, and settings files.
+"""Lint the repo's skill files.
 
 Run from anywhere: python tools/lint_skills.py
 
-Checks:
-- Every SKILL.md (.claude/skills/*, .agents/skills/*) has YAML frontmatter that
-  parses, with non-empty `name` and `description` keys
-- `allowed-tools` entries of the form `Bash(bun run <path> *)` point at files
-  that exist (skill paths resolve relative to the repo root and to .agents/)
-- Every .claude/commands/*.md starts with a `# /<name>` title
-- .claude/settings.json is valid JSON with a permissions.allow list
+Auto-detects the agent framework in use:
+  - Claude Code  (.claude/ present): checks .claude/skills/*/SKILL.md,
+    .claude/commands/*.md, and .claude/settings.json
+  - Antigravity  (.agents/ present): checks .agents/skills/*/SKILL.md
+
+Both branches may run if both directories exist (hybrid repos).
+
+Shared checks for every SKILL.md regardless of framework:
+- Has YAML frontmatter that parses, with non-empty `name` and `description`
+- `allowed-tools` entries of the form `Bash(bun run <path> *)` point at
+  files that exist (paths resolve relative to the repo root)
 
 Exit code 0 on success, 1 with a failure list otherwise.
 """
@@ -27,6 +31,13 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 errors: list[str] = []
 
+# ── Framework detection ────────────────────────────────────────────────────────
+
+HAS_CLAUDE = (ROOT / ".claude").is_dir()
+HAS_ANTIGRAVITY = (ROOT / ".agents").is_dir()
+
+
+# ── Shared skill check (both frameworks) ──────────────────────────────────────
 
 def rel(path: Path) -> str:
     return str(path.relative_to(ROOT))
@@ -70,14 +81,19 @@ def check_skill(path: Path) -> None:
                     errors.append(f"{rel(path)}: allowed-tools references a missing file: {target}")
 
 
-def check_command(path: Path) -> None:
+# ── Claude Code checks ────────────────────────────────────────────────────────
+
+def check_claude_command(path: Path) -> None:
     lines = path.read_text(encoding="utf-8").lstrip().splitlines()
     first = lines[0] if lines else ""
     if not first.startswith("# /"):
-        errors.append(f"{rel(path)}: command file must start with a '# /<name>' title (found: {first[:50]!r})")
+        errors.append(
+            f"{rel(path)}: command file must start with a '# /<name>' title "
+            f"(found: {first[:50]!r})"
+        )
 
 
-def check_settings() -> None:
+def check_claude_settings() -> None:
     path = ROOT / ".claude" / "settings.json"
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -88,26 +104,64 @@ def check_settings() -> None:
         errors.append(".claude/settings.json: expected permissions.allow to be a list")
 
 
-def main() -> int:
-    skills = sorted(ROOT.glob(".claude/skills/*/SKILL.md")) + sorted(ROOT.glob(".agents/skills/*/SKILL.md"))
-    commands = sorted((ROOT / ".claude" / "commands").glob("*.md"))
+def run_claude_checks() -> tuple[int, int]:
+    """Returns (skill_count, command_count)."""
+    skills = sorted((ROOT / ".claude").glob("skills/*/SKILL.md"))
+    commands = sorted((ROOT / ".claude").glob("commands/*.md"))
+
     if not skills:
-        errors.append("no SKILL.md files found - glob roots are wrong or the tree moved")
+        errors.append("Claude: no SKILL.md files found under .claude/skills/")
     if not commands:
-        errors.append("no command files found under .claude/commands/")
+        errors.append("Claude: no command files found under .claude/commands/")
 
     for skill in skills:
         check_skill(skill)
     for command in commands:
-        check_command(command)
-    check_settings()
+        check_claude_command(command)
+    check_claude_settings()
+
+    return len(skills), len(commands)
+
+
+# ── Antigravity checks ────────────────────────────────────────────────────────
+
+def run_antigravity_checks() -> int:
+    """Returns skill_count."""
+    skills = sorted(ROOT.glob(".agents/skills/*/SKILL.md"))
+
+    if not skills:
+        errors.append("Antigravity: no SKILL.md files found under .agents/skills/")
+
+    for skill in skills:
+        check_skill(skill)
+
+    return len(skills)
+
+
+# ── Entry point ───────────────────────────────────────────────────────────────
+
+def main() -> int:
+    if not HAS_CLAUDE and not HAS_ANTIGRAVITY:
+        print("lint_skills: ERROR - neither .claude/ nor .agents/ directory found")
+        return 1
+
+    summary_parts: list[str] = []
+
+    if HAS_CLAUDE:
+        n_skills, n_cmds = run_claude_checks()
+        summary_parts.append(f"Claude: {n_skills} skills, {n_cmds} commands")
+
+    if HAS_ANTIGRAVITY:
+        n_skills = run_antigravity_checks()
+        summary_parts.append(f"Antigravity: {n_skills} skills")
 
     if errors:
         print(f"lint_skills: {len(errors)} failure(s)")
         for err in errors:
             print(f"  - {err}")
         return 1
-    print(f"lint_skills: OK ({len(skills)} skills, {len(commands)} commands, settings.json)")
+
+    print(f"lint_skills: OK ({', '.join(summary_parts)})")
     return 0
 
 
