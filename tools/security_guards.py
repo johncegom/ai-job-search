@@ -3,17 +3,23 @@
 
 Run from anywhere: python tools/security_guards.py
 
-This repo ships Antigravity (Gemini) skill files and CLI code that every
-fork user executes. These guards make dangerous changes LOUD, not
-impossible: a PR that intentionally needs one of them must update the
-allowlists in this file in the same diff, so the change is explicit and
-reviewable rather than buried.
+This repo ships both Antigravity (Gemini) and Claude Code skill files and
+CLI code that every fork user executes. These guards make dangerous
+changes LOUD, not impossible: a PR that intentionally needs one of them
+must update the allowlists in this file in the same diff, so the change
+is explicit and reviewable rather than buried.
 
 Checks:
-1. .gitignore — the personal-data ignore rules must all still be present.
+1. .claude/settings.json — the permissions.allow list must not widen
+   beyond ALLOWED_PERMISSIONS. Catches a pre-approved command surface
+   quietly growing to something like `Bash(*)` or `Bash(curl:*)` that
+   every fork user then inherits without review. Antigravity has no
+   settings.json equivalent - it manages permissions through the IDE,
+   so this check only applies to the Claude Code harness.
+2. .gitignore — the personal-data ignore rules must all still be present.
    Catches weakening that would make future users silently commit their
    tracker, profile exports, or application archives.
-2. .agents/**/package.json — no npm/bun lifecycle scripts (preinstall,
+3. .agents/**/package.json — no npm/bun lifecycle scripts (preinstall,
    install, postinstall, prepare, prepack) and no trustedDependencies.
    Catches code execution smuggled into `bun install`.
 
@@ -27,12 +33,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 errors: list[str] = []
 
-# The CLI commands the template intends to pre-approve for fork users.
+# The CLI commands and skills the template intends to pre-approve for fork
+# users on Claude Code, validated against .claude/settings.json below.
 # Antigravity (Gemini) manages permissions through the IDE rather than a
-# settings.json file, so this set cannot be validated against a file at
-# CI time. It is kept here as an explicit reference: any PR that wants to
-# widen the intended command surface must update this set in the same diff.
+# settings.json file, so it has no equivalent enforcement - this set is the
+# single source of truth for the intended safe command surface on both
+# harnesses. Any PR that wants to widen it must update this set in the
+# same diff.
 ALLOWED_PERMISSIONS = {
+    "Skill(job-application-assistant)",
     "Bash(bun run:*)",
     "Bash(python salary_lookup.py:*)",
     "Bash(python3 salary_lookup.py:*)",
@@ -59,13 +68,26 @@ FORBIDDEN_SCRIPTS = {"preinstall", "install", "postinstall", "prepare", "prepack
 
 def check_permissions() -> None:
     # Antigravity (Gemini) manages permissions through the IDE - there is no
-    # .claude/settings.json or equivalent file shipped with this template.
-    # ALLOWED_PERMISSIONS above documents the intended safe command surface;
-    # enforcement relies on IDE configuration and human PR review.
-    print(
-        "note: check_permissions skipped - Antigravity has no settings.json "
-        "to scan (see ALLOWED_PERMISSIONS in this file for the intended allowlist)"
-    )
+    # settings.json equivalent to scan for that harness. Claude Code does
+    # ship .claude/settings.json, so that file is validated against
+    # ALLOWED_PERMISSIONS: every fork user inherits whatever it pre-approves.
+    path = ROOT / ".claude" / "settings.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        errors.append(f".claude/settings.json: unreadable: {exc}")
+        return
+    except json.JSONDecodeError as exc:
+        errors.append(f".claude/settings.json: invalid JSON: {exc}")
+        return
+    allow = data.get("permissions", {}).get("allow", [])
+    extra = sorted(set(allow) - ALLOWED_PERMISSIONS)
+    if extra:
+        errors.append(
+            f".claude/settings.json: permission(s) {extra} not in the reviewed allowlist. "
+            "A PR that intentionally widens the pre-approved command surface must add the "
+            "entry to ALLOWED_PERMISSIONS in tools/security_guards.py in the same diff."
+        )
 
 
 def check_gitignore() -> None:

@@ -30,7 +30,7 @@ The framework encodes career guidance best practices, including structured evalu
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) **or** [Antigravity (Gemini)](https://gemini.google.com) coding assistant
 - Python 3.10+
-- [Bun](https://bun.sh) (for Danish job search CLI tools)
+- [Bun](https://bun.sh) (for job search CLI tools)
 - LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors); the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`. If using a minimal TeX install such as TinyTeX or BasicTeX, install the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
 - Optional: `pdftotext` from [poppler](https://poppler.freedesktop.org/) (macOS: `brew install poppler`, Debian/Ubuntu: `apt install poppler-utils`, Windows: `choco install poppler`) — used by `/apply`'s ATS parseability check on the compiled CV. If missing, the check degrades gracefully to a visual keyword review.
 
@@ -59,12 +59,18 @@ foreach ($tool in $tools) {
 Bash / zsh / Git Bash:
 
 ```bash
+<<<<<<< HEAD
 cd .agents/skills/jobbank-search/cli && bun install && cd ../../../..
 cd .agents/skills/jobdanmark-search/cli && bun install && cd ../../../..
 cd .agents/skills/jobindex-search/cli && bun install && cd ../../../..
 cd .agents/skills/jobnet-search/cli && bun install && cd ../../../..
 cd .agents/skills/linkedin-search/cli && bun install && cd ../../../..
 cd .agents/skills/freehire-search/cli && bun install && cd ../../../..
+=======
+for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search freehire-search; do
+  cd .agents/skills/$tool/cli && bun install && cd ../../../..
+done
+>>>>>>> 7e8df3581927dca5ca1c34f394229e19131e679f
 ```
 
 For `linkedin-search` and `freehire-search` the install is optional: both have zero runtime dependencies and run with plain `bun`; `bun install` only pulls TypeScript dev types.
@@ -134,6 +140,7 @@ ai-job-search/
 │   │   ├── job-scraper/               # Job search orchestration
 │   │   └── upskill/                   # Gap analysis and learning plan
 │   └── settings.json                  # Claude Code permissions (shared, scoped)
+<<<<<<< HEAD
 ├── .agents/                            # Antigravity framework + cross-tool portal CLIs
 │   ├── AGENTS.md                      # Main candidate profile + workflow rules (Antigravity)
 │   ├── agents/
@@ -177,6 +184,15 @@ ai-job-search/
 │       ├── jobnet-search/             # Jobnet.dk (Denmark, government portal)
 │       ├── linkedin-search/           # LinkedIn public job listings (country-agnostic)
 │       └── freehire-search/           # freehire.dev tech job aggregator (multi-market)
+=======
+├── .agents/skills/                    # Job portal CLI tools
+│   ├── jobbank-search/                # Akademikernes Jobbank (Denmark)
+│   ├── jobdanmark-search/             # Jobdanmark.dk (Denmark)
+│   ├── jobindex-search/               # Jobindex.dk (Denmark)
+│   ├── jobnet-search/                 # Jobnet.dk (Denmark, government portal)
+│   ├── linkedin-search/               # LinkedIn public job listings (country-agnostic)
+│   └── freehire-search/               # freehire.dev tech job aggregator (multi-market, REST API)
+>>>>>>> 7e8df3581927dca5ca1c34f394229e19131e679f
 ├── cv/
 │   └── main_example.tex               # moderncv LaTeX template
 ├── cover_letters/
@@ -268,7 +284,11 @@ Maintaining a fork adapted to your market or language? Add it to the [Community 
 For **country-agnostic** starting points outside Denmark, the repo ships two portal skills alongside the Danish demos:
 
 - **`linkedin-search`** — built on LinkedIn's public, unauthenticated `jobs-guest` endpoints. Field-agnostic, **zero runtime dependencies** (runs with just `bun`), and takes the search location as an explicit flag, so it works for any market out of the box (`-l "Berlin, Germany"`, `-l "Mumbai, Maharashtra, India"`, `-l "Remote"`, …). Intended for **personal use only** — automated access is against LinkedIn's Terms of Service, so keep volume low. See `.agents/skills/linkedin-search/SKILL.md`.
+<<<<<<< HEAD
 - **`freehire-search`** — queries the [freehire.dev](https://freehire.dev) aggregator's public REST API (JSON, no API key). Tech-focused, multi-market via facet flags (`--region`, `--country`, `--remote`), and **zero runtime dependencies**. See `.agents/skills/freehire-search/SKILL.md`.
+=======
+- **`freehire-search`** — queries the [freehire.dev](https://freehire.dev) aggregator's public REST API (JSON, no API key). Tech-focused (software, data, engineering, DevOps, remote), multi-market via facet flags (`--region`, `--country`, `--remote`), and **zero runtime dependencies**. Unlike the HTML-scraping Danish portals, results come back structured (skills, seniority, category). The backend is MIT-licensed and [self-hostable](https://github.com/strelov1/freehire) — point `FREEHIRE_API_URL` at your own instance if you prefer. See `.agents/skills/freehire-search/SKILL.md`.
+>>>>>>> 7e8df3581927dca5ca1c34f394229e19131e679f
 
 ### Salary benchmarking
 

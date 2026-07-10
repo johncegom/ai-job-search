@@ -9,9 +9,12 @@ Primary:
 - **topdev.vn** - IT recruiter and job board in Vietnam
 - **bebee.com** - Global job aggregator with active Vietnamese listings
 
+Secondary (company career pages via Google):
+- Direct Google searches with `site:` filters for known target companies
+
 ## Query Categories
 
-Queries are grouped by priority.
+Queries are grouped by priority. Each query should be combined with your location terms (e.g. your city, region, or metro area) where the site supports it.
 
 ### Priority 1: Backend Developer (Go)
 
