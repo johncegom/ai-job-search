@@ -4,9 +4,17 @@ Step-by-step instructions for getting the AI Job Search framework running.
 
 ## 1. Prerequisites
 
-### Antigravity (Gemini)
+### Claude Code or Antigravity (Gemini)
 
-This framework is built to run directly inside the **Antigravity (Gemini)** coding assistant environment. No separate CLI tool installation is required.
+This framework runs directly inside either the **Claude Code** CLI or the **Antigravity (Gemini)** coding assistant environment. Pick whichever you use — no separate CLI tool installation is required beyond the assistant itself.
+
+Claude Code:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+You'll need an Anthropic API key or a Claude Pro/Team subscription. See the [Claude Code docs](https://docs.anthropic.com/en/docs/claude-code) for details.
 
 ### Python
 
@@ -20,7 +28,7 @@ On Windows, `py --version` is often the most reliable check. If your system expo
 
 ### Bun (for job search tools)
 
-The job portal CLIs (four Danish portals plus the country-agnostic LinkedIn tool) are written in TypeScript and run with Bun.
+The job portal CLIs (four Danish portals plus the country-agnostic `linkedin-search` and `freehire-search` tools) are written in TypeScript and run with Bun.
 
 - macOS/Linux:
 
@@ -116,7 +124,7 @@ Run these from the repository root.
 - PowerShell:
 
 ```powershell
-$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search")
+$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search", "freehire-search")
 foreach ($tool in $tools) {
   Set-Location ".agents/skills/$tool/cli"
   bun install
@@ -126,49 +134,51 @@ foreach ($tool in $tools) {
 
 - Bash / zsh / Git Bash:
 ```bash
-for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search; do
+for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search freehire-search; do
   cd .agents/skills/$tool/cli && bun install && cd ../../../..
 done
 ```
 
-For `linkedin-search` the install is optional: it has zero runtime dependencies and runs with plain `bun`; `bun install` only pulls TypeScript dev types.
+For `linkedin-search` and `freehire-search` the install is optional: both have zero runtime dependencies and run with plain `bun`; `bun install` only pulls TypeScript dev types.
 
-If you're outside Denmark, you can generate an equivalent search skill for your local job board with `add portal` — it scaffolds the same CLI structure for any public portal. See the "Job search tools" section in the README.
+If you're outside Denmark, you can generate an equivalent search skill for your local job board with `/add-portal` (Claude Code) or `add portal` (Antigravity) — it scaffolds the same CLI structure for any public portal. See the "Job search tools" section in the README.
 
 ## 4. Run the setup interview
 
-In your Antigravity chat, say:
+Claude Code: inside the `claude` CLI, run:
+> /setup
+
+Antigravity: in your Antigravity chat, say:
 > setup
 
-Gemini will offer three paths:
+Your assistant will offer three paths:
 
-- **Path A (documents folder):** Add your CV, LinkedIn export, diplomas, references, or past applications under `documents/`. Gemini reads and cross-references them before proposing profile updates.
-- **Path B (single CV import):** Share one CV/resume by pasting the text or referencing the file. Gemini extracts it and asks follow-up questions for anything missing.
+- **Path A (documents folder):** Add your CV, LinkedIn export, diplomas, references, or past applications under `documents/`. The assistant reads and cross-references them before proposing profile updates.
+- **Path B (single CV import):** Share one CV/resume by pasting the text or referencing the file. It extracts it and asks follow-up questions for anything missing.
 - **Path C (interview mode):** Answer structured interview questions section by section.
 
 All three paths produce the same result: fully populated profile files.
 
 ### What gets populated
 
-| File | Content |
-|------|---------|
-| `.agents/AGENTS.md` | Your full candidate profile |
-| `.agents/skills/job-application-assistant/01-candidate-profile.md` | Structured education, experience, skills |
-| `.agents/skills/job-application-assistant/02-behavioral-profile.md` | Behavioral assessment |
-| `.agents/skills/job-application-assistant/04-job-evaluation.md` | Personalized skill match areas and career goals |
-| `.agents/skills/job-application-assistant/05-cv-templates.md` | Profile statement templates for your background |
-| `.agents/skills/job-application-assistant/07-interview-prep.md` | STAR examples from your experience |
-| `cv/main_example.tex` | Your LaTeX CV with actual details |
-| `.agents/skills/job-scraper/search-queries.md` | Job search queries for the scraper |
+Setup updates both the Claude Code and Antigravity copies together, so the two harnesses stay in sync:
+
+| Claude Code file | Antigravity file | Content |
+|-------------------|--------------------|---------|
+| `CLAUDE.md` | `.agents/AGENTS.md` | Your full candidate profile |
+| `.claude/skills/job-application-assistant/01-candidate-profile.md` | `.agents/skills/job-application-assistant/01-candidate-profile.md` | Structured education, experience, skills |
+| `.claude/skills/job-application-assistant/02-behavioral-profile.md` | `.agents/skills/job-application-assistant/02-behavioral-profile.md` | Behavioral assessment |
+| `.claude/skills/job-application-assistant/04-job-evaluation.md` | `.agents/skills/job-application-assistant/04-job-evaluation.md` | Personalized skill match areas and career goals |
+| `.claude/skills/job-application-assistant/05-cv-templates.md` | `.agents/skills/job-application-assistant/05-cv-templates.md` | Profile statement templates for your background |
+| `.claude/skills/job-application-assistant/07-interview-prep.md` | `.agents/skills/job-application-assistant/07-interview-prep.md` | STAR examples from your experience |
+| `cv/main_example.tex` | `cv/main_example.tex` | Your LaTeX CV with actual details (shared) |
+| `.claude/skills/job-scraper/search-queries.md` | `.agents/skills/job-scraper/search-queries.md` | Job search queries for the scraper |
 
 ### Re-running setup
 
-You can update specific sections later:
-> setup --section skills
-> setup --section experience
-> setup --section search
+You can update specific sections later — `/setup --section skills` (Claude Code) or `setup --section skills` (Antigravity), and likewise for `--section experience` / `--section search`.
 
-The `setup --section search` option is especially useful as your priorities evolve. It re-runs the search configuration interview and suggests role types you may not have considered based on your full profile.
+The `--section search` option is especially useful as your priorities evolve. It re-runs the search configuration interview and suggests role types you may not have considered based on your full profile.
 
 ## 5. Optional: Set up salary benchmarking
 
@@ -185,17 +195,15 @@ This creates `salary_data.json` which the `/apply` workflow uses for salary benc
 
 ## 6. Test the workflow
 
-Find a job posting you're interested in, then trigger the apply workflow:
-> apply https://jobindex.dk/job/1234567
+Find a job posting you're interested in, then trigger the apply workflow: `/apply https://jobindex.dk/job/1234567` (Claude Code) or `apply https://jobindex.dk/job/1234567` (Antigravity).
 
-Or paste the job description directly:
-> apply [paste job posting text here]
+Or paste the job description directly instead of a URL.
 
-Gemini will:
+Your assistant will:
 1. Evaluate the fit against your profile
 2. Ask if you want to proceed
 3. Draft a tailored CV and cover letter
-4. Critique the drafts using a simulated reviewer phase
+4. Critique the drafts using a reviewer phase (a dispatched subagent on Claude Code, a simulated reviewer context on Antigravity)
 5. Revise and present the final output
 
 ## 7. Compile your documents
@@ -232,8 +240,8 @@ Make sure Bun is installed and you ran `bun install` in each CLI directory. The 
 ### Fonts not found in cover letter
 The cover letter template expects fonts in `cover_letters/OpenFonts/fonts/`. Make sure this directory exists and contains the Lato and Raleway font files.
 
-### Legacy `.claude` folder
-This repository has been fully adapted to use Antigravity (Gemini) customizations under `.agents/`. You should delete any remaining `.claude/` directories if they exist from older checkouts.
+### `.claude` and `.agents` both exist — is that right?
+Yes. `.claude/` is the Claude Code framework (commands, skills, `settings.json`) and `.agents/` holds the Antigravity framework plus the job-portal CLI tools shared by both harnesses. Keep both if you use (or might switch between) Claude Code and Antigravity; if you only ever use one, the other's directory is safe to delete.
 
 ### Stale `.claude/settings.local.json` from an older clone
 Shared Claude Code permissions now live in `.claude/settings.json` (scoped to `bun run`, `python salary_lookup.py`, and `python3 salary_lookup.py`). Earlier versions of this repo committed a broader `.claude/settings.local.json` that pre-approved `Bash(curl:*)`, `Bash(python:*)` and `Bash(bun:*)`. If you cloned before that change, git leaves the old file behind in your working copy, and its permissions still apply on top of `settings.json`. Delete it (or trim it to your own personal overrides):

@@ -1,12 +1,12 @@
 # AI Job Search
 
-An AI-powered job application framework built for [Antigravity (Gemini)](https://gemini.google.com). Fork it, fill in your profile, and let Gemini evaluate job postings, tailor your CV, write cover letters, and prepare you for interviews.
+An AI-powered job application framework that runs on both [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Antigravity (Gemini)](https://gemini.google.com). Fork it, fill in your profile, and let your coding assistant evaluate job postings, tailor your CV, write cover letters, and prepare you for interviews.
 
-> Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Google. Google and Gemini/Antigravity are referenced only to describe the toolchain this workflow uses.
+> Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Anthropic or Google. Claude Code, Google, and Gemini/Antigravity are referenced only to describe the toolchains this workflow supports.
 
 ## What this is
 
-A structured workflow that turns Antigravity (Gemini) into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. The job portal search skills are built for the Danish market (Jobindex, Jobnet, Akademikernes Jobbank, etc.), but the pattern is designed to be swapped for your local job boards.
+A structured workflow that turns Claude Code or Antigravity (Gemini) into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**, and works identically regardless of which assistant you use. The job portal search skills are built for the Danish market (Jobindex, Jobnet, Akademikernes Jobbank, etc.), but the pattern is designed to be swapped for your local job boards.
 
 ```
 Setup workflow  Scraper skill        Apply workflow
@@ -28,7 +28,7 @@ The framework encodes career guidance best practices, including structured evalu
 
 ## Prerequisites
 
-- [Antigravity (Gemini)](https://gemini.google.com) coding assistant
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) **or** [Antigravity (Gemini)](https://gemini.google.com) coding assistant
 - Python 3.10+
 - [Bun](https://bun.sh) (for Danish job search CLI tools)
 - LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors); the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`. If using a minimal TeX install such as TinyTeX or BasicTeX, install the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
@@ -48,7 +48,7 @@ cd ai-job-search
 PowerShell:
 
 ```powershell
-$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search")
+$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search", "freehire-search")
 foreach ($tool in $tools) {
   Set-Location ".agents/skills/$tool/cli"
   bun install
@@ -64,33 +64,38 @@ cd .agents/skills/jobdanmark-search/cli && bun install && cd ../../../..
 cd .agents/skills/jobindex-search/cli && bun install && cd ../../../..
 cd .agents/skills/jobnet-search/cli && bun install && cd ../../../..
 cd .agents/skills/linkedin-search/cli && bun install && cd ../../../..
+cd .agents/skills/freehire-search/cli && bun install && cd ../../../..
 ```
 
-For `linkedin-search` the install is optional: it has zero runtime dependencies and runs with plain `bun`; `bun install` only pulls TypeScript dev types.
+For `linkedin-search` and `freehire-search` the install is optional: both have zero runtime dependencies and run with plain `bun`; `bun install` only pulls TypeScript dev types.
 
 ### 3. Set up your profile
 
-In your Antigravity chat, run the setup workflow skill by typing:
+Claude Code:
+```bash
+claude
+# Then inside Claude Code:
+/setup
+```
+
+Antigravity: in your Antigravity chat, run the setup workflow skill by typing:
 > setup
 
 The setup workflow offers three paths: read your `documents/` folder if you have one populated (CV PDF, LinkedIn export, diplomas, reference letters, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `documents/README.md` for the layout.
 
 ### 4. Search for jobs
 
-To search for jobs, run the scraper skill by saying:
-> scrape
+Claude Code: run `/scrape`. Antigravity: say `scrape`.
 
-This searches multiple job portals for positions matching your profile, deduplicates results, and presents them sorted by fit. Pick a match to run the apply workflow on it directly — or, when a scrape returns more jobs than you want to eyeball, run the rank workflow to batch-score them all against the fit framework and get a ranked shortlist first.
+This searches multiple job portals for positions matching your profile, deduplicates results, and presents them sorted by fit. Pick a match to run the apply workflow on it directly — or, when a scrape returns more jobs than you want to eyeball, run the rank workflow (`/rank` or `rank`) to batch-score them all against the fit framework and get a ranked shortlist first.
 
 ### 5. Apply to a job
 
-To apply to a job, trigger the apply workflow by typing:
-> apply https://jobindex.dk/job/1234567
+Claude Code: `/apply https://jobindex.dk/job/1234567`. Antigravity: `apply https://jobindex.dk/job/1234567`.
 
-If the URL can't be fetched (some job portals block automated access), you can paste the job description directly instead:
-> apply <paste the full job description here>
+If the URL can't be fetched (some job portals block automated access), you can paste the job description directly instead.
 
-This runs the full workflow: evaluate fit, draft CV + cover letter, run a simulated reviewer critique, revise, and compile/inspect the final output.
+This runs the full workflow: evaluate fit, draft CV + cover letter, run a reviewer critique (a dispatched subagent on Claude Code, a simulated reviewer context on Antigravity), revise, and compile/inspect the final output.
 
 ## Workflows and Skills
 
@@ -110,8 +115,27 @@ Reset is also available, see [Starting over](#starting-over) below.
 
 ```
 ai-job-search/
-├── .agents/
-│   ├── AGENTS.md                      # Main candidate profile + workflow rules
+├── CLAUDE.md                          # Candidate profile + workflow rules (Claude Code)
+├── .claude/                           # Claude Code framework
+│   ├── commands/                      # /apply, /setup, /scrape's SKILL.md lives under skills/, etc.
+│   │   ├── apply.md
+│   │   ├── setup.md
+│   │   ├── expand.md
+│   │   ├── add-template.md
+│   │   ├── add-portal.md
+│   │   ├── rank.md
+│   │   ├── outcome.md
+│   │   ├── interview.md
+│   │   └── reset.md
+│   ├── agents/
+│   │   └── gemini-research-expert.md  # Research subagent
+│   ├── skills/
+│   │   ├── job-application-assistant/ # Core application skill (mirrors .agents/ below)
+│   │   ├── job-scraper/               # Job search orchestration
+│   │   └── upskill/                   # Gap analysis and learning plan
+│   └── settings.json                  # Claude Code permissions (shared, scoped)
+├── .agents/                            # Antigravity framework + cross-tool portal CLIs
+│   ├── AGENTS.md                      # Main candidate profile + workflow rules (Antigravity)
 │   ├── agents/
 │   │   └── gemini-research-expert.md  # Research subagent
 │   └── skills/
@@ -151,7 +175,8 @@ ai-job-search/
 │       ├── jobdanmark-search/         # Jobdanmark.dk (Denmark)
 │       ├── jobindex-search/           # Jobindex.dk (Denmark)
 │       ├── jobnet-search/             # Jobnet.dk (Denmark, government portal)
-│       └── linkedin-search/           # LinkedIn public job listings (country-agnostic)
+│       ├── linkedin-search/           # LinkedIn public job listings (country-agnostic)
+│       └── freehire-search/           # freehire.dev tech job aggregator (multi-market)
 ├── cv/
 │   └── main_example.tex               # moderncv LaTeX template
 ├── cover_letters/
@@ -192,23 +217,25 @@ All claims in the CV and cover letter are verified against your actual profile. 
 - **PDF verification loop.** Most LaTeX-resume templates produce "looks fine in the .tex" output that breaks in the PDF. The apply workflow compiles and visually inspects every PDF and applies targeted fixes until the layout is clean.
 - **ATS verification on the PDF text layer.** The apply workflow extracts the compiled CV's text layer with `pdftotext` and verifies contact details, reading order, and keyword coverage.
 - **Relevance-weighted CV cutting.** When a CV overflows 2 pages, it scores each candidate line by (a) relevance to the target posting, (b) uniqueness, and (c) cover letter dependencies, cutting the lowest-total-score line first.
-- **Drafter-reviewer separation.** The drafter writes; a simulated reviewer context researches the company and critiques the drafts, which are then revised.
+- **Drafter-reviewer separation.** The drafter writes; a reviewer researches the company and critiques the drafts, which are then revised. On Claude Code this is a dispatched subagent with a fresh context; on Antigravity it's a simulated reviewer perspective within the same context.
 
 ## Customization
 
 ### Which files to edit manually
 
-If you prefer editing files directly:
+If you prefer editing files directly, edit both the Claude Code and Antigravity copies so the two harnesses stay in sync:
 
-| File | What to change |
-|------|---------------|
-| `.agents/AGENTS.md` | Your full profile (name, education, experience, skills, goals) |
-| `.agents/skills/job-application-assistant/01-candidate-profile.md` | Structured version of your CV data |
-| `.agents/skills/job-application-assistant/02-behavioral-profile.md` | Your behavioral assessment or self-assessment |
-| `.agents/skills/job-application-assistant/04-job-evaluation.md` | Skill match areas, career goals, motivation filters |
-| `.agents/skills/job-application-assistant/05-cv-templates.md` | Profile statement templates for different role types |
-| `.agents/skills/job-application-assistant/07-interview-prep.md` | Your STAR examples from actual experience |
-| `.agents/skills/job-scraper/search-queries.md` | Job search queries for your skills and location |
+| Antigravity file | Claude Code equivalent | What to change |
+|-------------------|-------------------------|---------------|
+| `.agents/AGENTS.md` | `CLAUDE.md` | Your full profile (name, education, experience, skills, goals) |
+| `.agents/skills/job-application-assistant/01-candidate-profile.md` | `.claude/skills/job-application-assistant/01-candidate-profile.md` | Structured version of your CV data |
+| `.agents/skills/job-application-assistant/02-behavioral-profile.md` | `.claude/skills/job-application-assistant/02-behavioral-profile.md` | Your behavioral assessment or self-assessment |
+| `.agents/skills/job-application-assistant/04-job-evaluation.md` | `.claude/skills/job-application-assistant/04-job-evaluation.md` | Skill match areas, career goals, motivation filters |
+| `.agents/skills/job-application-assistant/05-cv-templates.md` | `.claude/skills/job-application-assistant/05-cv-templates.md` | Profile statement templates for different role types |
+| `.agents/skills/job-application-assistant/07-interview-prep.md` | `.claude/skills/job-application-assistant/07-interview-prep.md` | Your STAR examples from actual experience |
+| `.agents/skills/job-scraper/search-queries.md` | `.claude/skills/job-scraper/search-queries.md` | Job search queries for your skills and location |
+
+The job-portal CLI tools (`.agents/skills/*-search/`) and `/add-portal`-generated skills are shared — both harnesses read them from the same `.agents/skills/` location, no duplication needed.
 
 ### Updating your search queries
 
@@ -232,16 +259,16 @@ Point it at your `.tex` file. The command interviews you for the template's inst
 
 ### Job search tools
 
-The four Danish CLI tools in `.agents/skills/` (Jobbank, Jobdanmark, Jobindex, Jobnet) demonstrate the pattern for building a job-portal integration for a specific market. If you're in a different country, run:
-> add portal
-
-Give it your local job board's URL. The command investigates the portal and scaffolds a CLI skill.
+The four Danish CLI tools in `.agents/skills/` (Jobbank, Jobdanmark, Jobindex, Jobnet) demonstrate the pattern for building a job-portal integration for a specific market. If you're in a different country, run `/add-portal` (Claude Code) or say `add portal` (Antigravity).
 
 Give it your local job board's URL. The command investigates the portal (search-URL pattern, result-page structure, robots.txt/access rules), scaffolds a CLI skill with the same structure, commands, and output contract as the shipped ones, and test-runs a live query before registering anything. Auth-walled portals are declined, and portals with restrictive terms get a prominent personal-use-only warning in the generated skill. The generated skill is market-specific and lives in your fork; the generator itself is the universal part.
 
 Maintaining a fork adapted to your market or language? Add it to the [Community forks & adaptations](https://github.com/MadsLorentzen/ai-job-search/discussions/78) thread so others can find it.
 
-For a **country-agnostic** starting point, the repo also includes **`linkedin-search`** — a job-search skill built on LinkedIn's public, unauthenticated `jobs-guest` endpoints. It is field-agnostic, has **zero runtime dependencies** (runs with just `bun`), and takes the search location as an explicit flag, so it works for any market out of the box (`-l "Berlin, Germany"`, `-l "Mumbai, Maharashtra, India"`, `-l "Remote"`, …). It is intended for **personal use only** — automated access is against LinkedIn's Terms of Service, so keep volume low. See `.agents/skills/linkedin-search/SKILL.md`.
+For **country-agnostic** starting points outside Denmark, the repo ships two portal skills alongside the Danish demos:
+
+- **`linkedin-search`** — built on LinkedIn's public, unauthenticated `jobs-guest` endpoints. Field-agnostic, **zero runtime dependencies** (runs with just `bun`), and takes the search location as an explicit flag, so it works for any market out of the box (`-l "Berlin, Germany"`, `-l "Mumbai, Maharashtra, India"`, `-l "Remote"`, …). Intended for **personal use only** — automated access is against LinkedIn's Terms of Service, so keep volume low. See `.agents/skills/linkedin-search/SKILL.md`.
+- **`freehire-search`** — queries the [freehire.dev](https://freehire.dev) aggregator's public REST API (JSON, no API key). Tech-focused, multi-market via facet flags (`--region`, `--country`, `--remote`), and **zero runtime dependencies**. See `.agents/skills/freehire-search/SKILL.md`.
 
 ### Salary benchmarking
 
@@ -249,10 +276,7 @@ The salary tool works with any salary data you provide. See `tools/README_SALARY
 
 ### Starting over
 
-To wipe your profile data and start fresh:
-- Say `reset profile` to clear skill files while preserving framework rules.
-- Say `reset documents` to delete files from the `documents/` folder.
-- Say `reset all` to clear both.
+To wipe your profile data and start fresh, run `/reset profile` (Claude Code) or say `reset profile` (Antigravity) to clear skill files while preserving framework rules. `reset documents` deletes files from the `documents/` folder; `reset all` clears both.
 
 ## Tips for better results
 
@@ -276,7 +300,7 @@ Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first - it explains
 
 - [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search) — the upstream repository this framework is forked from, originally built for Claude Code.
 - [Mikkel Krogholm](https://github.com/mikkelkrogsholm) ([skills repo](https://github.com/mikkelkrogsholm/skills)) for the original job search CLI skills.
-- Fully adapted for [Antigravity (Gemini)](https://gemini.google.com): skills, agents, AGENTS.md rules, verification checklists, and compilation toolchain have been rewritten for the Gemini coding assistant.
+- Adapted to also run on [Antigravity (Gemini)](https://gemini.google.com): a parallel `.agents/` skill tree, AGENTS.md rules, verification checklists, and compilation toolchain were added for the Gemini coding assistant, alongside the original `.claude/`/CLAUDE.md Claude Code framework.
 
 ## License
 
