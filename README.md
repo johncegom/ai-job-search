@@ -2,6 +2,12 @@
 
 An AI-powered job application framework that runs on both [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Antigravity (Gemini)](https://gemini.google.com). Fork it, fill in your profile, and let your coding assistant evaluate job postings, tailor your CV, write cover letters, and prepare you for interviews.
 
+<p align="center">
+  <a href="https://trendshift.io/repositories/43622?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-43622" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/43622/daily" alt="MadsLorentzen%2Fai-job-search | Trendshift" width="250" height="55"/></a>
+</p>
+
+[![CI](https://github.com/MadsLorentzen/ai-job-search/actions/workflows/ci.yml/badge.svg)](https://github.com/MadsLorentzen/ai-job-search/actions/workflows/ci.yml)
+
 > Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Anthropic or Google. Claude Code, Google, and Gemini/Antigravity are referenced only to describe the toolchains this workflow supports.
 
 ## What this is
