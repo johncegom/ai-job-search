@@ -78,13 +78,14 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 
 ### Target Sectors
 <!-- Industries and companies you're targeting -->
-- **Backend Development:** Go/Golang platforms (Primary focus)
-- **IoT / Mobile Connectivity:** BLE, Wi-Fi, wireless-enabled software
+- **Backend Development:** Go/Golang platforms (Primary focus — as of 2026-07-12, actively transitioning toward Go as the target stack. Erlang/telecom-signaling experience is still a genuine asset and stays in the CV as evidence of distributed/high-availability systems chops, but is no longer the role to chase: don't lead an application with it, and prefer roles where Go is the primary stack.)
+- **IoT / Mobile Connectivity:** BLE, Wi-Fi, wireless-enabled software (Go-based backends preferred over Erlang-based ones)
 
 ### Deal-breakers
 <!-- Hard constraints on job search -->
 - Requirements to relocate from Ho Chi Minh City
 - Completely isolated solo environments with no agile/collaboration framework or QA processes
+- Roles where Erlang/Elixir or legacy telecom signaling (SIP/Diameter/Megaco) is the **primary** day-to-day stack rather than Go (Erlang as a secondary/nice-to-have is fine)
 
 ## Repo Structure
 - `cv/` - LaTeX CV variants (moderncv template, banking style)
