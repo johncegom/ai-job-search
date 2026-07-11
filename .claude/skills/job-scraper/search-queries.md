@@ -7,7 +7,8 @@ Primary:
 - **vietnamworks.com** - Leading Vietnamese job portal
 - **itviec.com** - Top developer-focused portal in Vietnam
 - **topdev.vn** - IT recruiter and job board in Vietnam
-- **bebee.com** - Global job aggregator with active Vietnamese listings
+
+Removed: **bebee.com** - dropped 2026-07-11. Listings there churn/expire within a day or two of being indexed (3 of 4 bebee postings from the 2026-07-11 scrape 404'd by the time `/rank` fetched them hours later), making it an unreliable source.
 
 Secondary (company career pages via Google):
 - Direct Google searches with `site:` filters for known target companies
@@ -29,7 +30,6 @@ site:linkedin.com/jobs "Software Engineer Go" "Ho Chi Minh City"
 site:linkedin.com/jobs "Backend Developer HCMC" "Ho Chi Minh City"
 site:itviec.com "Go Backend Engineer" "Ho Chi Minh"
 site:topdev.vn "Backend Developer" "Go" "Ho Chi Minh"
-site:bebee.com "Golang" "Ho Chi Minh"
 ```
 
 ### Priority 2: React Native / Mobile Developer
@@ -40,7 +40,6 @@ These leverage your recent project experience at Endava.
 site:itviec.com "React Native" "Ho Chi Minh"
 site:topdev.vn "React Native" "Ho Chi Minh"
 site:linkedin.com/jobs "React Native Developer" "Ho Chi Minh City"
-site:bebee.com "React Native" "Ho Chi Minh"
 ```
 
 ### Priority 3: Software Engineer
