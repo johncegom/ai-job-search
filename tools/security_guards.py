@@ -80,14 +80,29 @@ def check_permissions() -> None:
     except json.JSONDecodeError as exc:
         errors.append(f".claude/settings.json: invalid JSON: {exc}")
         return
-    allow = data.get("permissions", {}).get("allow", [])
-    extra = sorted(set(allow) - ALLOWED_PERMISSIONS)
-    if extra:
-        errors.append(
-            f".claude/settings.json: permission(s) {extra} not in the reviewed allowlist. "
-            "A PR that intentionally widens the pre-approved command surface must add the "
-            "entry to ALLOWED_PERMISSIONS in tools/security_guards.py in the same diff."
-        )
+    if not isinstance(data, dict):
+        errors.append(".claude/settings.json: top-level JSON value must be an object")
+        return
+    permissions = data.get("permissions", {})
+    if not isinstance(permissions, dict):
+        errors.append(".claude/settings.json: permissions must be an object")
+        return
+    allow = permissions.get("allow", [])
+    if not isinstance(allow, list) or not all(isinstance(entry, str) for entry in allow):
+        errors.append(".claude/settings.json: permissions.allow must be a list of strings")
+        return
+    for entry in allow:
+        if entry not in ALLOWED_PERMISSIONS:
+            errors.append(
+                f".claude/settings.json: permission not in the reviewed allowlist: {entry!r}. "
+                "Pre-approved permissions run without prompting on every fork. If this entry is "
+                "intentional, add it to ALLOWED_PERMISSIONS in tools/security_guards.py in the "
+                "same PR so the widening is explicit and reviewable."
+            )
+    for entry in ALLOWED_PERMISSIONS - set(allow):
+        # Not an error: settings may legitimately drop an entry. But an
+        # allowlist entry that no longer exists should be pruned.
+        print(f"note: allowlisted permission not present in settings.json: {entry!r}")
 
 
 def check_gitignore() -> None:
@@ -120,7 +135,14 @@ def check_package_manifests() -> None:
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"{relpath}: unreadable or invalid JSON: {exc}")
             continue
-        bad = FORBIDDEN_SCRIPTS & set(data.get("scripts", {}))
+        if not isinstance(data, dict):
+            errors.append(f"{relpath}: top-level JSON value must be an object")
+            continue
+        scripts = data.get("scripts", {})
+        if not isinstance(scripts, dict):
+            errors.append(f"{relpath}: scripts must be an object")
+            continue
+        bad = FORBIDDEN_SCRIPTS & set(scripts)
         if bad:
             errors.append(
                 f"{relpath}: lifecycle script(s) {sorted(bad)} are forbidden - they execute "
