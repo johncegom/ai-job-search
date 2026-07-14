@@ -1,3 +1,7 @@
+---
+framework_version: 1.0.0
+---
+
 # CV Templates and Tailoring Guide
 
 <!-- SETUP: Profile statements and section ordering are personalized by running /setup -->
@@ -105,12 +109,13 @@ Write 5-7 lines that function as an "elevator pitch": a concise, compelling intr
 
 **Create 2-3 profile statement templates for your main role types:**
 
-<!-- SETUP: These are populated based on your background -->
-**For [YOUR_PRIMARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_1]
+**For Go backend roles (general):**
+> Software Engineer with 6 years of experience specializing in high-availability backend solutions and device-management mobile applications. Hands-on experience developing microservices in Go and building low-latency communication layers in React Native. Expert in utilizing advanced AI-assisted development tools and orchestrating custom agentic workflows to streamline system delivery.
+> *[Used for: circa_pharmacy]*
 
-**For [YOUR_SECONDARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_2]
+**For Go + AI-first-culture roles:**
+> Software Engineer with 6 years of experience specializing in high-availability backend solutions and AI-augmented developer workflows. Hands-on experience developing concurrent microservices in Go, designing distributed database schemas, and accelerating engineering throughput using AI tools like Claude Code and Google Antigravity/Gemini. Certified Scrum Master committed to clean code, test-driven development (TDD), and continuous delivery.
+> *[Used for: firegroup]*
 
 ### Core Competencies / Skills Section (Best Practice)
 Reorder and emphasize based on the role. Use bold category labels.

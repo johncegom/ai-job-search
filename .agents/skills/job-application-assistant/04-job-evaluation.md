@@ -17,7 +17,7 @@ How well do the required/preferred skills align with the candidate's capabilitie
 | 0-39 | Fundamental mismatch |
 
 **Strong match areas:** Go, TypeScript/JavaScript, React Native, BLE & Wi-Fi device connectivity.
-**Moderate match areas:** Erlang, Databases (Mnesia, SQLite, Firebase), RESTful APIs, telecommunications signaling (SIP, Diameter, Megaco), Agile/Scrum facilitation, Git, CI/CD pipelines (Jenkins, GitLab CI).
+**Moderate match areas:** Erlang, Databases (Mnesia, SQLite, Firebase), RESTful APIs, telecommunications signaling (SIP, Diameter, Megaco), Agile/Scrum facilitation, Git, CI/CD pipelines (Jenkins, GitLab CI). Erlang/signaling still counts as genuine Technical Skills match — the candidate has advanced Erlang and direct signaling experience — but see the Career Alignment note below for how it should (and shouldn't) drive the overall recommendation.
 **Weak match areas:** Machine Learning/AI model training, heavy cloud DevOps (AWS/Azure at scale), enterprise systems administration.
 
 ### 2. Experience Match (0-100)
@@ -63,19 +63,22 @@ Does this role advance career goals and contain tasks that energize?
 | 0-39 | Dead end or backwards step |
 
 **Career goals:**
-- Transition to and expand expertise in Backend Development (particularly utilizing Go and TypeScript/JavaScript).
-- Work on robust, real-time communication, IoT, or networking platforms where BLE/connectivity skills are valuable.
+- **Fully transition to Golang backend development.** This is the primary driver of Career Alignment scoring — a role built around Go should score well here even if other dimensions are only moderate. As of 2026-07-12, the candidate is deliberately steering new applications toward Go rather than continuing to build on the Erlang track record.
+- **Erlang/telecom-signaling background is kept as supporting evidence, not the target.** It's genuinely valuable and should still be used in Go-role cover letters and CVs as proof of distributed, high-availability systems experience (the "Erlang → Go" transferable-systems-thinking narrative is a real selling point). What changed is the *target*: don't apply to, or lead an application with, a role where Erlang/Elixir/telecom signaling **is the primary stack** — that delays rather than advances the transition, even if it would score well on raw skills/experience match. A role where Go is the primary stack and distributed-systems/telecom background is a nice-to-have is exactly the sweet spot.
+- Work on robust, real-time communication, IoT, or networking platforms where BLE/connectivity skills are valuable, provided the core language is Go (or TypeScript/JavaScript).
 - Leverage and grow Scrum/Agile engineering practices within collaborative engineering teams.
 
 **Motivation filter:** Evaluate not just whether you *can* do the tasks, but whether the tasks will *energize* you. Consider:
-- Tasks that energize: Complex debugging/troubleshooting, wireless protocol optimization (BLE/Wi-Fi), building high-availability features, mentoring teammates, and streamlining workflows as Scrum Master.
-- Tasks that drain: Micro-managed individual project silos, zero documentation processes, or pure maintenance of static platforms with no modernization opportunities.
+- Tasks that energize: Complex debugging/troubleshooting, wireless protocol optimization (BLE/Wi-Fi), building high-availability features (ideally in Go), mentoring teammates, and streamlining workflows as Scrum Master.
+- Tasks that drain: Micro-managed individual project silos, zero documentation processes, pure maintenance of static platforms with no modernization opportunities, and roles where Erlang/Elixir/legacy telecom signaling is the primary day-to-day stack rather than Go.
 - Non-task factors: leadership style, department culture, company values, degree of autonomy
 
 **Life situation alignment:** Consider personal constraints:
 - **Security**: Currently employed at Endava, providing stability during search.
 - **Flexibility**: Commuting within Ho Chi Minh City, Vietnam.
 - **Professional development**: Priorities include Go-centric development, IoT/connectivity, and team collaboration.
+
+<!-- Note: this file's Scoring Dimensions/Career goals section is kept in sync with .claude/skills/job-application-assistant/04-job-evaluation.md (Claude Code copy). Edit both together. -->
 
 ### 6. Salary Benchmark (Optional)
 

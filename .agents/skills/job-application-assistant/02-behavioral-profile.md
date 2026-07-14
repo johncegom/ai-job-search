@@ -13,10 +13,11 @@ Duong Nguyen Hoang Minh's behavioral assessment identifies them as a **Collabora
 | Adaptability | High | Quickly adapts across technologies (Go, Erlang, TypeScript) and platforms (telecom software to React Native). |
 
 ## Strongest Behaviors
-- **Agile Facilitation:** Proven capacity to lead and establish stable ways of working (as a Scrum Master for a team of 4 engineers).
+- **Agile Facilitation:** Proven capacity to lead and establish stable ways of working (as a Scrum Master for a team of 5 engineers).
 - **Disciplined Execution:** Strong commitment to software quality, defining comprehensive testing strategies, and troubleshooting critical defects.
 - **Collaborative Problem Solving:** Thrives in close, team-centric settings, supporting onboarding, mentoring, and working cross-functionally to refine requirements.
 - **Proactive Self-Directed Study:** Leverages multi-channel study materials (structured courses, video content, documentation, and AI tools) to rapidly gain proficiency in new technical domains like Go. *(Source: Continuous Learning)*
+- **Quality-Speed Balance:** Explicitly frames his own working style as caring "about testable, reviewed code as much as shipping fast." *[Inferred from LinkedIn Summary - review before relying on this]* - self-authored evidence reinforcing the existing Disciplined Problem Solving / High Attention to Detail framing below.
 
 ## How You Work Best
 - **Agile and Structured Environments:** Where Scrum or clear delivery processes are valued but remain flexible enough to encourage initiative.
