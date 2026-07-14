@@ -18,6 +18,8 @@ An AI-powered job application framework that runs on both [Claude Code](https://
 >
 > This project has **no affiliated cryptocurrency, token, or paid sponsorship program**. Anything claiming otherwise is unauthorized and should be treated as a scam. The only ways to support the project are the Ko-fi link below and contributing on GitHub.
 
+> ⚠️ **Forking this repo for your own job search?** This fork already has a real candidate's profile data filled in. Run `/reset all` (Claude Code) or `reset all` (Antigravity) **first** to wipe it, then run `/setup` (Claude Code) or `setup` (Antigravity) to fill in your own profile before using any other workflow.
+
 ## Does it actually work?
 
 I'm a geophysicist by training. When my position was cut in late 2025, I built this framework to run my own job search - the same `/scrape`, `/apply`, and `/interview` workflow in this repo, used weekly, on my own career. I was upfront about it with every employer I spoke to, and instead of counting against me, it usually sparked a genuine technical conversation.
