@@ -30,7 +30,7 @@ This repo is a job application workspace. Antigravity (Gemini) acts as a career 
 ### Professional Experience
 <!-- List your roles, most recent first -->
 - **Developer / React Native Developer** (July 2024 - Present) - **Endava Vietnam** (Ho Chi Minh City, Vietnam)
-  - Served as React Native Developer on a wireless/IoT platform (August 2025 - July 2026) for installing, configuring, and managing industrial devices.
+  - Served as React Native Developer on a wireless/IoT platform (August 2025 - June 2026) for installing, configuring, and managing industrial devices.
   - Optimized BLE and Wi-Fi hardware connectivity layers for stable real-time device interaction.
   - Engineered new features and high-priority fixes for a complex mobile application, maintaining high availability for technical operators.
   - Worked in a lean, 2-person development environment across the full application lifecycle.
@@ -40,7 +40,7 @@ This repo is a job application workspace. Antigravity (Gemini) acts as a career 
   - Defined comprehensive automated testing strategies to reduce defects and ensure continuous uptime in production.
   - Tech Stack: Erlang, Mnesia, Megaco, Diameter, SIP, Linux, Git, Gerrit, Jenkins.
 - **Scrum Master** (October 2022 - October 2023) - **DEK Technologies** (Ho Chi Minh City, Vietnam)
-  - Led a team of 4 software engineers, facilitating daily standups, sprint planning, and retrospectives.
+  - Led a team of 5 software engineers, facilitating daily standups, sprint planning, and retrospectives.
   - Established a stable delivery cadence and distributed workload evenly.
 
 ### Technical Skills

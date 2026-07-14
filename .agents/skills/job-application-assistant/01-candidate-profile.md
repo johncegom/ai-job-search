@@ -7,6 +7,7 @@
 - **Email:** johncegom2013@gmail.com
 - **LinkedIn:** linkedin.com/in/minh-duong-saiko
 - **GitHub:** github.com/johncegom
+- **Portfolio:** minhduong.vercel.app
 - **Languages:** Vietnamese (Native), English (Professional)
 - **Status:** Currently employed at Endava (no active project assignment)
 - **Constraints:** Ho Chi Minh City
@@ -21,7 +22,7 @@
 
 ### Developer / React Native Developer - Endava Vietnam (July 2024 - Present)
 Ho Chi Minh City, Vietnam
-- Served as a React Native Developer (August 2025 - July 2026) contributing to a mobile platform designed for technical users to install, configure, and manage network-connected devices using wireless communication.
+- Served as a React Native Developer (August 2025 - June 2026) contributing to a mobile platform designed for technical users to install, configure, and manage network-connected devices using wireless communication.
 - Implemented application features, addressed critical issues, and improved production stability by balancing new Bluetooth Low Energy (BLE) and Wi-Fi enhancements with ongoing maintenance.
 - Engineered new features and high-priority fixes for a complex React Native application, maintaining high system availability for technical field operators.
 - Optimized hardware connectivity layers by implementing robust BLE and Wi-Fi protocols to ensure stable real-time device interaction.
@@ -38,7 +39,7 @@ Tech Stack: Erlang, Mnesia, SIP, Diameter, Megaco, Git, Gerrit, Jenkins, Jira, L
 
 ### Scrum Master - DEK Technologies (October 2022 - October 2023)
 Ho Chi Minh City, Vietnam
-- Led a team of 4 software engineers to establish a stable way of working and distribute workload evenly among team members.
+- Led a team of 5 software engineers to establish a stable way of working and distribute workload evenly among team members.
 - Adhered to the Scrum framework for efficient project management.
 
 ## Technical Skills
@@ -66,6 +67,8 @@ Ho Chi Minh City, Vietnam
 ## Certifications
 - **Action Learning Foundation** - actionlearningcoach.org
 - **Agile Crash Course** - yesieducation.com
+- **Udemy Alumni** - Udemy (November 2023 - December 2023) *(course title not yet specified - update when known)*
+- **Zero To Mastery Academy** *(program/course title and dates not yet specified - update when known)*
 
 ## References
 - Available upon request.

@@ -1,14 +1,20 @@
 # Search Queries for Job Scraper
 
+<!-- SETUP: Customize these queries based on your skills, target roles, and location -->
+
+## Installed portal CLIs (primary for `/scrape`)
+
+`/scrape` discovers every portal skill under `.agents/skills/*/SKILL.md` and runs its CLI first. Shipped country-agnostic CLIs include `linkedin-search` and `freehire-search`; Danish demos and any skill you add with `/add-portal` are included the same way. You do **not** need a matching `site:` line below for those CLIs to run.
+
+The `site:` query templates in this file are the **WebSearch fallback** — for portals without a CLI, company career pages, or when a CLI fails.
+
 ## Search Sites
 
-Primary:
+Primary (your market's job boards - scaffold one with `/add-portal`):
 - **linkedin.com/jobs** - LinkedIn job listings (filter: Ho Chi Minh City, Vietnam)
 - **vietnamworks.com** - Leading Vietnamese job portal
 - **itviec.com** - Top developer-focused portal in Vietnam
 - **topdev.vn** - IT recruiter and job board in Vietnam
-
-Removed: **bebee.com** - dropped 2026-07-11. Listings there churn/expire within a day or two of being indexed (3 of 4 bebee postings from the 2026-07-11 scrape 404'd by the time `/rank` fetched them hours later), making it an unreliable source.
 
 Secondary (company career pages via Google):
 - Direct Google searches with `site:` filters for known target companies

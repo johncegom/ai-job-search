@@ -104,3 +104,7 @@ The cover letter is **not a CV repetition**. It should be forward-looking:
 - Default to the language of the job posting
 - Cover letters in the posting's language should feel natural, not translated
 - Slightly warmer, more personal tone may be acceptable in some languages
+
+## Patterns Observed in Past Applications
+
+- **AI-workflow self-demonstration:** Both real cover letters on file (Circa Pharmacy, FireGroup) close the body with a line noting that the letter and CV were themselves prepared using the candidate's own AI-assisted workflow (e.g. "this cover letter and CV were prepared and verified using a custom AI assistant workflow that I set up to streamline my work"). This is a deliberate meta-demonstration for AI-forward roles, not a one-off - keep it for roles where AI-tooling proficiency is a stated requirement or selling point, placed near the AI Agent Workflows bullet or in the closing paragraph.
