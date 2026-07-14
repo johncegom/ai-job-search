@@ -54,17 +54,16 @@ Ho Chi Minh City, Vietnam
 - **TypeScript / JavaScript** (Advanced)
 
 ### Databases
-- Mnesia, SQLite, Firebase, PostgreSQL, Redis *(GitHub — bolt-buy)*
+- Mnesia, SQLite, Firebase, PostgreSQL, Redis
 
 ### Technologies & Frameworks
-- React Native, React 19, Redux, Redux Toolkit, React Navigation, Async Storage, Tailwind CSS v4, HTML5, CSS3, REST API, SIP, Diameter, Megaco, Bluetooth Low Energy (BLE), Wi-Fi, Vitest *(GitHub — position-size-calculator)*, i18next (i18n) *(GitHub — position-size-calculator)*, Redis Lua Scripting *(GitHub — bolt-buy)*, Google GenAI Go SDK *(GitHub — soi-tro)*, Bubble Tea & Huh? TUI *(GitHub — soi-tro)*, OpenAPI 3.0 Schemas *(GitHub — soi-tro)*
+- React Native, React 19, Redux, Redux Toolkit, React Navigation, Async Storage, Tailwind CSS v4, HTML5, CSS3, REST API, SIP, Diameter, Megaco, Bluetooth Low Energy (BLE), Wi-Fi, Vitest *(GitHub — position-size-calculator)*, i18next (i18n) *(GitHub — position-size-calculator)*, Google GenAI Go SDK *(GitHub — soi-tro)*, Bubble Tea & Huh? TUI *(GitHub — soi-tro)*, OpenAPI 3.0 Schemas *(GitHub — soi-tro)*
 
 ### Software & Tools
 - Git, GitLab, Jira, Gerrit, Jenkins, Confluence, Linux, Google Antigravity (Gemini), OpenAI Codex, Devin, AI-assisted engineering models and context-management tools (MCP)
 
 ## Projects
 
-- **Bolt Buy:** A high-performance, concurrent purchase processing backend built in Go. Coordinates a Redis in-memory cache and a PostgreSQL relational database. Utilizes atomic Redis Lua scripts, transactional rollbacks, and idempotency locks to prevent overselling and database saturation under concurrent load. Built purely hands-on without AI assistance.
 - **Position Size Calculator:** A fintech-grade React 19 + TypeScript application for trade risk analysis and account growth simulation. Integrates Redux Toolkit, Tailwind CSS v4 styling, i18next localization, and Vitest unit testing. Developed using AI-assisted engineering tools.
 - **Soi Trọ:** An AI-powered multimodal CLI tool written in Go to extract, parse, and structure rental listing details from screenshots and text. Powered by the Google GenAI Go SDK and Gemini 3.1 Flash-Lite, it uses Huh? & Bubble Tea for interactive TUI forms, maps schemas dynamically using OpenAPI 3.0 specs, handles normalization of local slangs, and exports reports with owner-only secure file permissions (0o600). Built entirely through a structured AI agent orchestration loop (using Antigravity and custom constraints).
 
