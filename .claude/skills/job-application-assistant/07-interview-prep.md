@@ -41,16 +41,6 @@ Keep answers to 1-2 minutes. Be specific. End with what you learned or would do 
 
 ## STAR Candidates (Complete Manually)
 
-### Bolt Buy - Personal Go Backend Project
-**Source:** GitHub project, referenced heavily in both Circa Pharmacy and FireGroup applications as primary Go evidence
-**What happened:** Built a concurrent purchase-processing backend in Go, coordinating a Redis in-memory cache and PostgreSQL, using atomic Redis Lua scripts, transactional rollbacks, and idempotency locks to prevent overselling under concurrent load. Per the candidate's own note (2026-07-13), it was built by reading and re-implementing a reference design rather than original architecture - be honest about that distinction if asked how independently it was designed.
-**Why it matters:** This is the single most-cited piece of evidence for Go competence across both real applications; likely to come up directly in any Go-focused interview.
-**S/T/A/R stub:**
-- Situation:
-- Task:
-- Action:
-- Result:
-
 ### Soi Trọ - AI-Orchestrated Go CLI Tool
 **Source:** CV / GitHub project. A complete STAR already exists in `documents/applications/firegroup/interview_prep.md` (Q3) - copy and adapt from there rather than redrafting.
 **What happened:** Built a Go CLI tool using the Google GenAI Go SDK and Gemini to extract and structure rental-listing details from screenshots/text, with Huh?/Bubble Tea TUI and OpenAPI 3.0 schema mapping, built through a structured AI agent orchestration loop.
@@ -76,7 +66,7 @@ Keep answers to 1-2 minutes. Be specific. End with what you learned or would do 
 These recur across almost every posting scored so far (MongoDB, Elasticsearch, Kubernetes/GCP, and AWS Lambda are all common gaps in `/rank` and `/upskill` output). Adapted from the Circa Pharmacy and FireGroup interview prep packs so they don't need to be redrafted per application.
 
 ### "Have you worked with MongoDB / Elasticsearch?"
-> "My professional database experience is primarily with PostgreSQL, Mnesia, and Redis. In my personal Go project, Bolt Buy, I used Redis Lua scripting to handle concurrent atomic operations and database synchronization with Postgres. I understand that MongoDB focuses on document validation rules and aggregation pipelines, while Elasticsearch uses inverted indexes for search relevance, and I'm comfortable with the Go driver integrations for both, though I don't have professional production experience with either yet."
+> "My professional database experience is primarily with PostgreSQL, Mnesia, and Redis. I understand that MongoDB focuses on document validation rules and aggregation pipelines, while Elasticsearch uses inverted indexes for search relevance, and I'm comfortable with the Go driver integrations for both, though I don't have professional production experience with either yet."
 
 ### "How comfortable are you with Kubernetes / GCP?"
 > "I'm comfortable with containerization principles and have worked alongside DevOps pipelines at DEK Technologies and Endava, including Docker workflows in my own projects. I haven't configured multi-region production clusters in GCP or Kubernetes myself - that's an area I'm actively upskilling in by building local clusters and writing Kubernetes manifests for Pods, Deployments, and Services, rather than something I'd claim as production experience."
