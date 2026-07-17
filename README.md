@@ -61,7 +61,7 @@ The framework encodes career guidance best practices, including structured evalu
 
 ## Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) **or** [Antigravity (Gemini)](https://gemini.google.com) coding assistant
+- [Claude Code](https://claude.com/claude-code) (CLI). Using a different agent tool (Codex, Antigravity, Gemini CLI)? Start at [`AGENTS.md`](AGENTS.md) - the portal search skills work there out of the box, and [community forks](https://github.com/MadsLorentzen/ai-job-search/discussions/78) adapt the full workflow.
 - Python 3.10+
 - [Bun](https://bun.sh) (for job search CLI tools)
 - LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors); the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`. If using a minimal TeX install such as TinyTeX or BasicTeX, install the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
@@ -83,9 +83,9 @@ PowerShell:
 ```powershell
 $tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search", "freehire-search")
 foreach ($tool in $tools) {
-  Set-Location ".agents/skills/$tool/cli"
+  Push-Location ".agents/skills/$tool/cli"
   bun install
-  Set-Location "..\..\..\.."
+  Pop-Location
 }
 ```
 
@@ -93,7 +93,7 @@ Bash / zsh / Git Bash:
 
 ```bash
 for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search freehire-search; do
-  cd .agents/skills/$tool/cli && bun install && cd ../../../..
+  (cd .agents/skills/$tool/cli && bun install)
 done
 ```
 
@@ -131,34 +131,36 @@ This runs the full workflow: evaluate fit, draft CV + cover letter, run a review
 
 The setup, scrape, and apply actions form the core workflow. Seven additional workflow skills extend it once your profile is in place:
 
-- **Interview Prep** (triggers on `interview prep <company>` or similar) preps you for a scheduled interview on a tracked application. It builds a stage-specific prep pack from the application's archive, researches the company and interviewers, maps likely questions to your STAR examples, and offers a mock interview.
-- **Outcome** (triggers on `record outcome` or `outcome`) records what happened to an application - interview stages, offers, rejections, silence. It archives the submitted CV, cover letter, and posting text, and updates the tracker.
-- **Rank** (triggers on `rank` or `triage jobs`) bridges the scraper and apply workflows: it batch-scores all newly scraped postings against the fit framework and returns a ranked shortlist with honest per-job strengths and gaps.
-- **Expand** (triggers on `expand profile` or `expand`) enriches your profile by scanning public sources you've already linked in it (GitHub repos, portfolio site, Kaggle, Google Scholar).
-- **Upskill** (triggers on `upskill`) analyzes the gap between your profile and your tracked job postings. Produces a prioritized heatmap of skill gaps and a learning plan.
-- **Add Template** (triggers on `add template`) registers your own LaTeX CV or cover letter template in place of the stock ones.
-- **Add Portal** (triggers on `add portal`) generates a job-portal search skill for a job board in your market.
+`/setup`, `/scrape`, and `/apply` form the core workflow. Eight more commands extend it once your profile is in place:
 
-Reset is also available, see [Starting over](#starting-over) below.
+- **`/interview`** preps you for a scheduled interview on a tracked application. It builds a stage-specific prep pack from the application's archive (the exact posting, the CV and cover letter the interviewer actually read, feedback recorded from earlier rounds), researches the company and interviewers with a verify-before-use rule, maps likely questions to your STAR examples, and offers a mock interview following the roleplay protocol in `07-interview-prep.md`. Gaps get honest bridge answers, never invented experience.
+- **`/outcome`** records what happened to an application - interview stages, offers, rejections, silence. It archives the submitted CV, cover letter, and posting text into `documents/applications/<company>_<role>/`, keeps `outcome.md` in the format `/setup` Path A parses, and updates the tracker. Once a few applications resolve, it points you back to `/setup` to calibrate the fit framework from what actually got interviews.
+- **`/rank`** bridges `/scrape` and `/apply`: it batch-scores all newly scraped postings against the fit framework (parallel agents fetch each posting and score the five evaluation dimensions) and returns a ranked shortlist with honest per-job strengths and gaps. Deal-breakers veto, deadlines get urgency flags, dead postings get marked expired. Pick a number and it hands off to the full `/apply` workflow.
+- **`/expand`** enriches your profile by scanning public sources you've already linked in it (GitHub repos, portfolio site, Kaggle, Google Scholar) and looking up syllabi for named courses and certifications. Discovered competencies are added to your profile with a source tag. Useful right after `/setup` to surface skills that documents alone don't make explicit.
+- **`/upskill`** analyzes the gap between your profile and your tracked job postings (or a single posting via `/upskill <URL>`). Produces a prioritized heatmap of skill gaps and a learning plan with web-searched study resources and time estimates. Useful for career planning between applications.
+- **`/html-report`** generates a self-contained HTML dashboard from `job_search_tracker.csv` and the application archives — stat cards, status/sector/channel/funnel charts (inline SVG, no external dependencies), and a filterable applications table. Opens directly in a browser, fully offline. Re-run it any time after `/outcome` adds new entries.
+- **`/add-template`** registers your own LaTeX CV or cover letter template in place of the stock ones. It captures the template's instructions (compile engine, fonts, style rules, page limit), runs a mandatory test compile, and wires the template into `/apply`. See [LaTeX templates](#latex-templates) below.
+- **`/add-portal`** generates a job-portal search skill for a job board in your market. It investigates the portal (search URL pattern, result structure, access rules), scaffolds the CLI skill from the same structure as the shipped ones, and test-runs a live query before registering. See [Job search tools](#job-search-tools) below.
+
+`/reset` is also available, see [Starting over](#starting-over) below.
 
 ## File structure
 
 ```
 ai-job-search/
-├── CLAUDE.md                          # Candidate profile + workflow rules (Claude Code)
-├── .claude/                           # Claude Code framework
-│   ├── commands/                      # /apply, /setup, /scrape's SKILL.md lives under skills/, etc.
-│   │   ├── apply.md
-│   │   ├── setup.md
-│   │   ├── expand.md
-│   │   ├── add-template.md
-│   │   ├── add-portal.md
-│   │   ├── rank.md
-│   │   ├── outcome.md
-│   │   ├── interview.md
-│   │   └── reset.md
-│   ├── agents/
-│   │   └── gemini-research-expert.md  # Research subagent
+├── CLAUDE.md                          # Main candidate profile + workflow rules
+├── .claude/
+│   ├── commands/
+│   │   ├── apply.md                   # /apply workflow (drafter-reviewer)
+│   │   ├── setup.md                   # /setup onboarding (documents folder, CV import, or interview)
+│   │   ├── expand.md                  # /expand competency enrichment from documents and online presence
+│   │   ├── add-template.md            # /add-template register custom LaTeX templates
+│   │   ├── add-portal.md              # /add-portal generate a job-portal search skill for your market
+│   │   ├── rank.md                    # /rank triage scraped jobs into a ranked shortlist
+│   │   ├── outcome.md                 # /outcome record application results, archive materials
+│   │   ├── interview.md               # /interview stage-specific prep pack + mock interview
+│   │   ├── html-report.md             # /html-report generate application tracker dashboard
+│   │   └── reset.md                   # /reset wipe profile data or documents folder
 │   ├── skills/
 │   │   ├── job-application-assistant/ # Core application skill (mirrors .agents/ below)
 │   │   ├── job-scraper/               # Job search orchestration
