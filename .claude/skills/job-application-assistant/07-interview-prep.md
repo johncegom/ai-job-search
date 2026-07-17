@@ -91,6 +91,23 @@ These recur across almost every posting scored so far (MongoDB, Elasticsearch, K
 ### "Why this company specifically?"
 > Customize per company. Must reference: specific projects, company values, market position, or team structure. Never give a generic answer.
 
+## System Design / Debugging Question Technique
+
+*Learned from the FireGroup onsite interview (2026-07-17), where an observability/silent-failure system design question exposed two reusable gaps.*
+
+### Ask when in doubt, even if the diagram looks complete
+The instinct to stay quiet because "the diagram looks clear enough, asking more might sound like a dumb question" is a trap - system design interviews often leave details out **on purpose**, specifically to see whether you surface the missing pieces yourself (alerting config, validation logic, monitoring setup) rather than silently assuming they're fine. Asking "what does the alerting/monitoring setup look like here?" is not a sign of weak preparation - it's part of a strong answer. If a question feels like it might be "too basic" to ask, that feeling is itself the signal to ask it, not to stay silent.
+
+### The Trace → Split → Watch → Fix framework
+For "review this design, find the bug/gap" style questions:
+1. **Trace:** Map the full data/request flow end-to-end before guessing at causes (e.g., trigger → fetch/compute → validate → write → downstream consumer).
+2. **Split:** At each step, separate two distinct failure modes: (a) a loud failure - crash, exception, timeout, non-2xx - and (b) a **silent failure** - the step returns "successfully" (no exception, 200 OK) but with wrong/empty/stale data. Most candidates only check for (a); the interesting bugs live in (b).
+3. **Watch:** Ask whether monitoring/alerting covers infra-level signals only (invocation success, latency, exception rate) or also business/semantic-level signals (is the resulting data plausible - e.g., alert if a record count is 0 when the baseline is always >0). Silent-failure bugs almost always live in this gap between infra monitoring and data monitoring.
+4. **Fix:** Propose both a quick win (a specific validation + alert for the exact gap found) and a structural principle (e.g., "successful" should mean "produced valid data," not just "didn't throw").
+
+### Pull vs. push monitoring - watch for carried-over assumptions from a different operational culture
+"Log the error and quietly investigate/fix later if noticed" is a legitimate pattern in some environments (e.g., internal ops-monitored telecom systems where someone actively reviews logs) - it is **not** automatically wrong. But it's a **pull** model: it assumes a human proactively goes looking. Customer-facing SaaS products need a **push** model: monitoring must actively surface anomalies (alerts, pages), because nobody is reliably reading logs in real time - as the FireGroup question demonstrated, the failure mode being tested was exactly "no alert fired, only the customer noticed." When a past-experience instinct (e.g., from Erlang/telecom ops culture) doesn't obviously transfer to a customer-facing SaaS context, say so explicitly in the interview ("in my previous environment we relied on X, but I recognize a customer-facing product needs Y because...") rather than silently defaulting to the old assumption - naming the distinction reads as more senior than either extreme.
+
 ## Questions You Should Ask Interviewers
 
 ### About the Role
