@@ -159,6 +159,21 @@ Claiming a credential not yet held is a factual misstatement, and it is the kind
 - Rewrite bullet points to emphasize aspects most relevant to the target role
 - Use 4-6 bullets for most recent role, 3-4 for previous, 2-3 for older
 - **Emphasize measurable results** where possible: "Reduced processing time by X%", "Model adopted by the team"
+- **Keep this section exclusively paid/employer work.** Do not fold a personal project into a role's bullet list even if it used the same technology - see "Personal Projects vs. Professional Experience" below.
+
+### Personal Projects vs. Professional Experience (important)
+
+These are two separate sections (`Professional Experience` for Endava/DEK Technologies; `Personal Projects` or `Independent Projects` for Position Size Calculator, Soi Trọ) and must never blend into each other, even when a project is the closer skill match for the posting. See `03-writing-style.md` Rule 7 for the full rationale (this is the exact gap that surfaced in the FireGroup rejection - Go skills read as more production-tested than they were).
+
+- **Section header, not just placement, does the labeling.** Call it "Personal Projects" or "Independent Projects," never a bare "Projects" that could be misread as client/employer work.
+- **Verb and scope register must match the bucket:**
+  | Professional Experience (paid) | Personal Projects (unpaid) |
+  |---|---|
+  | "collaborated with cross-functional teams" | "built independently" / "self-initiated" |
+  | "maintained for field operators," "production," "high-availability" | "designed," "explored," a GitHub/demo link |
+  | team size, on-call, incident language | single-developer, learning-driven language |
+- **When a posting's core requirement is met mainly through a personal project** (e.g. "N years hands-on Go" and the candidate's Go is Soi Trọ, not a paid Go role), do not let the Skills section imply otherwise by omission. Either keep Go out of a bolded "N years" claim, or pair the skill with a footnote/qualifier the cover letter then makes explicit (see `06-cover-letter-templates.md`).
+- This is a factual-accuracy verification item, not just style: check it during the Verification Checklist pass in `CLAUDE.md` alongside "no fabricated skills, experience, or achievements."
 
 #### Check tenure against visible output
 

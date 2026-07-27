@@ -128,6 +128,12 @@ Interpret results relative to the baseline defined in the data file's metadata. 
 
 If the salary tool is not configured, skip this section.
 
+## Calibration from Past Applications
+
+**FireGroup Technology — Backend Engineer, Claude Code Engineer (Golang) (2026-07):** Reached full onsite interview (screening + technical round) despite the JD stating a hard "3+ years professional Golang" requirement that the candidate does not meet — the AI-agent/Claude Code strength alone was evidently enough to clear screening for a Go-titled SaaS role with an "AI-first" culture. However, the application was ultimately **rejected post-interview**, with the Go production-experience gap confirmed live as a likely deciding factor (also compounded by a mediocre reasoning-assessment score and a missed system-design question). **Calibration:** for postings that state an explicit multi-year hard minimum for Go (vs. Go merely listed without a year threshold), don't let a strong AI-agent/Claude Code angle alone push Career Alignment or Technical Skills scoring high enough to mask that gap — flag it explicitly under Gaps to Address as "explicit hard-years requirement not met" carrying elevated rejection risk, even when the role otherwise looks like a strong career-alignment fit.
+
+*Tiếng Việt: **FireGroup Technology — Backend Engineer, Claude Code Engineer (Golang) (2026-07):** Đã vào được vòng phỏng vấn trực tiếp đầy đủ (sàng lọc + vòng kỹ thuật) dù JD nêu rõ yêu cầu cứng "3+ năm kinh nghiệm Golang chuyên nghiệp" mà ứng viên chưa đáp ứng — riêng thế mạnh AI-agent/Claude Code đã đủ để vượt qua vòng sàng lọc cho một vị trí Go tại công ty SaaS có văn hóa "AI-first". Tuy nhiên, hồ sơ cuối cùng **bị từ chối sau phỏng vấn**, với khoảng cách kinh nghiệm Go production được xác nhận trực tiếp trong buổi phỏng vấn là yếu tố quyết định nhiều khả năng nhất (cộng thêm điểm bài đánh giá reasoning ở mức trung bình và bỏ lỡ câu hỏi system design). **Hiệu chỉnh:** với các JD nêu rõ yêu cầu cứng về số năm kinh nghiệm Go tối thiểu (khác với việc chỉ liệt kê Go mà không có ngưỡng năm), không nên để yếu tố AI-agent/Claude Code mạnh một mình đẩy điểm Career Alignment hoặc Technical Skills lên cao đến mức che lấp khoảng cách đó — cần ghi rõ trong mục Gaps to Address là "yêu cầu cứng về số năm chưa đáp ứng" mang rủi ro bị từ chối cao hơn, kể cả khi vai trò nhìn chung có vẻ phù hợp tốt về định hướng sự nghiệp.*
+
 ## Output Format
 
 Present the evaluation as:

@@ -147,6 +147,15 @@ The font wrapper is mandatory — if you just move `\begin{itemize}` outside `\l
 - Start each bullet with bold label or action verb
 - Use `\textbf{Label:}` for category-style bullets
 
+### Disclosing Personal-Project Experience for a Skill the Posting Requires "Hands-On" (important)
+
+When a posting's core requirement is met mainly through a personal project rather than paid work (e.g. "N years hands-on Go" and the strongest evidence is Soi Trọ, not a production Go role), say so directly in the body paragraph rather than letting a bullet imply production depth. See `03-writing-style.md` Rule 7 - this is a direct calibration from the FireGroup rejection, where the Go production-experience gap surfaced live in the interview instead of being addressed upfront.
+
+Pattern: one plain sentence pairing the professional-experience truth with the personal-project bridge, e.g.:
+> "While my professional backend experience has been primarily in Erlang, I've built hands-on Go proficiency through independent projects like Soi Trọ, an AI-powered Go CLI tool."
+
+This is not a hedge or an apology (see Writing Style Rule 4 - no apologetic language); it's a direct, confident statement of fact that pre-empts the question rather than leaving it for the interviewer to uncover. Place it in the body paragraph that introduces the bullet list, before the bullets make the skill claim.
+
 ### LaTeX Special Characters
 - Underscore: `\_`
 - Ampersand: `\&`
